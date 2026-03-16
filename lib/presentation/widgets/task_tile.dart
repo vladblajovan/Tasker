@@ -12,6 +12,7 @@ import 'package:tasker/presentation/blocs/task/task_event.dart';
 import 'package:tasker/presentation/widgets/category_chip.dart';
 import 'package:tasker/presentation/widgets/priority_badge.dart';
 import 'package:tasker/presentation/widgets/tag_chip.dart';
+import 'package:tasker/presentation/widgets/undo_helpers.dart';
 
 class TaskTile extends StatelessWidget {
   const TaskTile({
@@ -35,6 +36,7 @@ class TaskTile extends StatelessWidget {
           SlidableAction(
             onPressed: (_) {
               context.read<TaskBloc>().add(DeleteTaskEvent(task.id));
+              UndoHelpers.showUndoDeleteSnackBar(context, task);
             },
             backgroundColor: Colors.red,
             foregroundColor: Colors.white,
@@ -49,6 +51,7 @@ class TaskTile extends StatelessWidget {
           value: task.isCompleted,
           onChanged: (_) {
             context.read<TaskBloc>().add(ToggleTaskEvent(task.id));
+            UndoHelpers.showUndoToggleSnackBar(context, task);
           },
         ),
         title: Text(

@@ -221,37 +221,74 @@ class _TaskFormPageState extends State<TaskFormPage> {
   }
 
   Widget _buildDueDatePicker() {
-    return ListTile(
-      contentPadding: EdgeInsets.zero,
-      title: Text(
-        _dueDate != null
-            ? 'Due: ${DateFormat.yMMMd().format(_dueDate!)}'
-            : 'No due date',
-      ),
-      trailing: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (_dueDate != null)
-            IconButton(
-              icon: const Icon(Icons.clear),
-              onPressed: () => setState(() => _dueDate = null),
-            ),
-          IconButton(
-            icon: const Icon(Icons.calendar_today),
-            onPressed: () async {
-              final picked = await showDatePicker(
-                context: context,
-                initialDate: _dueDate ?? DateTime.now(),
-                firstDate: DateTime(2020),
-                lastDate: DateTime(2100),
-              );
-              if (picked != null) {
-                setState(() => _dueDate = picked);
-              }
-            },
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final tomorrow = today.add(const Duration(days: 1));
+    final nextWeek = today.add(const Duration(days: 7));
+
+    bool isSameDay(DateTime? a, DateTime b) =>
+        a != null && a.year == b.year && a.month == b.month && a.day == b.day;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        ListTile(
+          contentPadding: EdgeInsets.zero,
+          title: Text(
+            _dueDate != null
+                ? 'Due: ${DateFormat.yMMMd().format(_dueDate!)}'
+                : 'No due date',
           ),
-        ],
-      ),
+          trailing: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (_dueDate != null)
+                IconButton(
+                  icon: const Icon(Icons.clear),
+                  onPressed: () => setState(() => _dueDate = null),
+                ),
+              IconButton(
+                icon: const Icon(Icons.calendar_today),
+                onPressed: () async {
+                  final picked = await showDatePicker(
+                    context: context,
+                    initialDate: _dueDate ?? DateTime.now(),
+                    firstDate: DateTime(2020),
+                    lastDate: DateTime(2100),
+                  );
+                  if (picked != null) {
+                    setState(() => _dueDate = picked);
+                  }
+                },
+              ),
+            ],
+          ),
+        ),
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: [
+              ChoiceChip(
+                label: const Text('Today'),
+                selected: isSameDay(_dueDate, today),
+                onSelected: (_) => setState(() => _dueDate = today),
+              ),
+              const SizedBox(width: 8),
+              ChoiceChip(
+                label: const Text('Tomorrow'),
+                selected: isSameDay(_dueDate, tomorrow),
+                onSelected: (_) => setState(() => _dueDate = tomorrow),
+              ),
+              const SizedBox(width: 8),
+              ChoiceChip(
+                label: const Text('Next Week'),
+                selected: isSameDay(_dueDate, nextWeek),
+                onSelected: (_) => setState(() => _dueDate = nextWeek),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 

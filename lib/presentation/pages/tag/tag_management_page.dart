@@ -5,6 +5,7 @@ import 'package:tasker/domain/entities/tag.dart';
 import 'package:tasker/presentation/blocs/tag/tag_bloc.dart';
 import 'package:tasker/presentation/blocs/tag/tag_event.dart';
 import 'package:tasker/presentation/blocs/tag/tag_state.dart';
+import 'package:tasker/presentation/widgets/empty_state.dart';
 import 'package:uuid/uuid.dart';
 
 class TagManagementPage extends StatelessWidget {
@@ -26,12 +27,10 @@ class TagManagementPage extends StatelessWidget {
           final tags = state.tags;
 
           if (tags.isEmpty) {
-            return const Center(
-              child: Text(
-                'No tags yet.\nTap + to add one.',
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.grey),
-              ),
+            return const EmptyState(
+              icon: Icons.label_outline,
+              title: 'No tags yet',
+              subtitle: 'Tap + to add one',
             );
           }
 

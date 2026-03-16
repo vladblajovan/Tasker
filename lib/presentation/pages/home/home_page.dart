@@ -15,6 +15,7 @@ import 'package:tasker/presentation/blocs/task/task_state.dart';
 import 'package:tasker/presentation/pages/category/category_management_page.dart';
 import 'package:tasker/presentation/pages/tag/tag_management_page.dart';
 import 'package:tasker/presentation/widgets/filter_bar.dart';
+import 'package:tasker/presentation/widgets/empty_state.dart';
 import 'package:tasker/presentation/widgets/task_tile.dart';
 
 class HomePage extends StatefulWidget {
@@ -60,8 +61,10 @@ class _HomePageState extends State<HomePage> {
                     .where((t) => t.parentTaskId == null)
                     .toList();
                 if (topLevelTasks.isEmpty) {
-                  return const Center(
-                    child: Text('No tasks yet. Tap + to add one!'),
+                  return const EmptyState(
+                    icon: Icons.checklist,
+                    title: 'No tasks yet',
+                    subtitle: 'Tap + to create your first task',
                   );
                 }
                 return ListView.builder(

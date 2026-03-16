@@ -17,6 +17,7 @@ import 'package:tasker/presentation/widgets/category_chip.dart';
 import 'package:tasker/presentation/widgets/priority_badge.dart';
 import 'package:tasker/presentation/widgets/tag_chip.dart';
 import 'package:tasker/presentation/widgets/task_tile.dart';
+import 'package:tasker/presentation/widgets/undo_helpers.dart';
 
 class TaskDetailPage extends StatefulWidget {
   const TaskDetailPage({super.key, required this.taskId});
@@ -56,6 +57,7 @@ class _TaskDetailPageState extends State<TaskDetailPage> {
 
     if (confirmed == true && context.mounted) {
       context.read<TaskBloc>().add(DeleteTaskEvent(task.id));
+      UndoHelpers.showUndoDeleteSnackBar(context, task);
       context.pop();
     }
   }
@@ -310,6 +312,10 @@ class _TaskDetailPageState extends State<TaskDetailPage> {
                             ToggleTaskEvent(widget.taskId),
                           );
                           context.read<TaskBloc>().add(const LoadTasks());
+                          UndoHelpers.showUndoToggleSnackBar(
+                            context,
+                            resolvedTask,
+                          );
                         },
                       ),
                       IconButton(

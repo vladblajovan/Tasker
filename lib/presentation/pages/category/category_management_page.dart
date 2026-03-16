@@ -5,6 +5,7 @@ import 'package:tasker/domain/entities/category.dart';
 import 'package:tasker/presentation/blocs/category/category_bloc.dart';
 import 'package:tasker/presentation/blocs/category/category_event.dart';
 import 'package:tasker/presentation/blocs/category/category_state.dart';
+import 'package:tasker/presentation/widgets/empty_state.dart';
 import 'package:uuid/uuid.dart';
 
 class CategoryManagementPage extends StatelessWidget {
@@ -26,12 +27,10 @@ class CategoryManagementPage extends StatelessWidget {
           final categories = state.categories;
 
           if (categories.isEmpty) {
-            return const Center(
-              child: Text(
-                'No categories yet.\nTap + to add one.',
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.grey),
-              ),
+            return const EmptyState(
+              icon: Icons.category_outlined,
+              title: 'No categories yet',
+              subtitle: 'Tap + to add one',
             );
           }
 
