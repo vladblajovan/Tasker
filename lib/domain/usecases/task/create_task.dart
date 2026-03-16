@@ -1,6 +1,6 @@
-import 'package:test_app/core/error/failures.dart';
-import 'package:test_app/domain/entities/task.dart';
-import 'package:test_app/domain/repositories/task_repository.dart';
+import 'package:tasker/core/error/failures.dart';
+import 'package:tasker/domain/entities/task.dart';
+import 'package:tasker/domain/repositories/task_repository.dart';
 
 class CreateTask {
   CreateTask(this._taskRepository);

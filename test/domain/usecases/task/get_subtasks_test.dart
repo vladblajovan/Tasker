@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:test_app/domain/entities/task.dart';
-import 'package:test_app/domain/repositories/task_repository.dart';
-import 'package:test_app/domain/usecases/task/get_subtasks.dart';
+import 'package:tasker/domain/entities/task.dart';
+import 'package:tasker/domain/repositories/task_repository.dart';
+import 'package:tasker/domain/usecases/task/get_subtasks.dart';
 
 class MockTaskRepository extends Mock implements TaskRepository {}
 
@@ -34,27 +34,27 @@ void main() {
         ),
       ];
 
-      when(() => mockTaskRepository.getTasksByParentId('parent-1'))
-          .thenAnswer((_) async => subtasks);
+      when(
+        () => mockTaskRepository.getTasksByParentId('parent-1'),
+      ).thenAnswer((_) async => subtasks);
 
       final result = await useCase.call('parent-1');
 
       expect(result, subtasks);
       expect(result.length, 2);
-      verify(() => mockTaskRepository.getTasksByParentId('parent-1'))
-          .called(1);
+      verify(() => mockTaskRepository.getTasksByParentId('parent-1')).called(1);
       verifyNoMoreInteractions(mockTaskRepository);
     });
 
     test('should return empty list when no subtasks exist', () async {
-      when(() => mockTaskRepository.getTasksByParentId('parent-1'))
-          .thenAnswer((_) async => []);
+      when(
+        () => mockTaskRepository.getTasksByParentId('parent-1'),
+      ).thenAnswer((_) async => []);
 
       final result = await useCase.call('parent-1');
 
       expect(result, isEmpty);
-      verify(() => mockTaskRepository.getTasksByParentId('parent-1'))
-          .called(1);
+      verify(() => mockTaskRepository.getTasksByParentId('parent-1')).called(1);
     });
   });
 }

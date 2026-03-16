@@ -1,6 +1,6 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:test_app/data/datasources/tag_local_datasource.dart';
-import 'package:test_app/data/models/tag_model.dart';
+import 'package:tasker/data/datasources/tag_local_datasource.dart';
+import 'package:tasker/data/models/tag_model.dart';
 
 class TagRemoteDatasourceImpl implements TagLocalDatasource {
   TagRemoteDatasourceImpl(this._client, this._localDatasource);

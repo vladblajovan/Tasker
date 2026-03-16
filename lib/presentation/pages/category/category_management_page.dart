@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:test_app/domain/entities/category.dart';
-import 'package:test_app/presentation/blocs/category/category_bloc.dart';
-import 'package:test_app/presentation/blocs/category/category_event.dart';
-import 'package:test_app/presentation/blocs/category/category_state.dart';
+import 'package:tasker/domain/entities/category.dart';
+import 'package:tasker/presentation/blocs/category/category_bloc.dart';
+import 'package:tasker/presentation/blocs/category/category_event.dart';
+import 'package:tasker/presentation/blocs/category/category_state.dart';
 import 'package:uuid/uuid.dart';
 
 class CategoryManagementPage extends StatelessWidget {
@@ -39,14 +39,10 @@ class CategoryManagementPage extends StatelessWidget {
             itemCount: categories.length,
             onReorder: (oldIndex, newIndex) {
               if (newIndex > oldIndex) newIndex -= 1;
-              final reordered = List<String>.from(
-                categories.map((c) => c.id),
-              );
+              final reordered = List<String>.from(categories.map((c) => c.id));
               final id = reordered.removeAt(oldIndex);
               reordered.insert(newIndex, id);
-              context
-                  .read<CategoryBloc>()
-                  .add(ReorderCategories(reordered));
+              context.read<CategoryBloc>().add(ReorderCategories(reordered));
             },
             itemBuilder: (context, index) {
               final category = categories[index];
@@ -75,9 +71,7 @@ class CategoryManagementPage extends StatelessWidget {
             createdAt: DateTime.now(),
             order: 0,
           );
-          context
-              .read<CategoryBloc>()
-              .add(CreateCategoryEvent(category));
+          context.read<CategoryBloc>().add(CreateCategoryEvent(category));
         },
       ),
     );
@@ -114,10 +108,7 @@ class _CategoryTile extends StatelessWidget {
         ],
       ),
       child: ListTile(
-        leading: CircleAvatar(
-          backgroundColor: color,
-          radius: 14,
-        ),
+        leading: CircleAvatar(backgroundColor: color, radius: 14),
         title: Text(category.name),
         trailing: const Icon(Icons.drag_handle, color: Colors.grey),
       ),
@@ -135,9 +126,7 @@ class _CategoryTile extends StatelessWidget {
             name: name,
             color: color.toARGB32(),
           );
-          context
-              .read<CategoryBloc>()
-              .add(UpdateCategoryEvent(updated));
+          context.read<CategoryBloc>().add(UpdateCategoryEvent(updated));
         },
       ),
     );
@@ -148,8 +137,7 @@ class _CategoryTile extends StatelessWidget {
       context: context,
       builder: (ctx) => AlertDialog(
         title: const Text('Delete Category'),
-        content:
-            Text('Are you sure you want to delete "${category.name}"?'),
+        content: Text('Are you sure you want to delete "${category.name}"?'),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(false),
@@ -165,9 +153,7 @@ class _CategoryTile extends StatelessWidget {
     );
 
     if (confirmed == true && context.mounted) {
-      context
-          .read<CategoryBloc>()
-          .add(DeleteCategoryEvent(category.id));
+      context.read<CategoryBloc>().add(DeleteCategoryEvent(category.id));
     }
   }
 }
@@ -245,10 +231,7 @@ class _CategoryDialogState extends State<_CategoryDialog> {
             textCapitalization: TextCapitalization.sentences,
           ),
           const SizedBox(height: 16),
-          const Text(
-            'Color',
-            style: TextStyle(fontWeight: FontWeight.w600),
-          ),
+          const Text('Color', style: TextStyle(fontWeight: FontWeight.w600)),
           const SizedBox(height: 8),
           Wrap(
             spacing: 8,
@@ -264,18 +247,11 @@ class _CategoryDialogState extends State<_CategoryDialog> {
                     color: color,
                     shape: BoxShape.circle,
                     border: isSelected
-                        ? Border.all(
-                            color: Colors.black,
-                            width: 2.5,
-                          )
+                        ? Border.all(color: Colors.black, width: 2.5)
                         : null,
                   ),
                   child: isSelected
-                      ? const Icon(
-                          Icons.check,
-                          size: 16,
-                          color: Colors.white,
-                        )
+                      ? const Icon(Icons.check, size: 16, color: Colors.white)
                       : null,
                 ),
               );

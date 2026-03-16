@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:test_app/domain/entities/category.dart';
-import 'package:test_app/domain/entities/priority.dart';
-import 'package:test_app/domain/entities/tag.dart';
-import 'package:test_app/presentation/blocs/category/category_bloc.dart';
-import 'package:test_app/presentation/blocs/category/category_state.dart';
-import 'package:test_app/presentation/blocs/tag/tag_bloc.dart';
-import 'package:test_app/presentation/blocs/tag/tag_state.dart';
-import 'package:test_app/presentation/blocs/task/task_bloc.dart';
-import 'package:test_app/presentation/blocs/task/task_event.dart';
+import 'package:tasker/domain/entities/category.dart';
+import 'package:tasker/domain/entities/priority.dart';
+import 'package:tasker/domain/entities/tag.dart';
+import 'package:tasker/presentation/blocs/category/category_bloc.dart';
+import 'package:tasker/presentation/blocs/category/category_state.dart';
+import 'package:tasker/presentation/blocs/tag/tag_bloc.dart';
+import 'package:tasker/presentation/blocs/tag/tag_state.dart';
+import 'package:tasker/presentation/blocs/task/task_bloc.dart';
+import 'package:tasker/presentation/blocs/task/task_event.dart';
 
 class FilterBar extends StatefulWidget {
   const FilterBar({super.key});
@@ -56,8 +56,9 @@ class _FilterBarState extends State<FilterBar> {
   Widget _buildCategoryDropdown() {
     return BlocBuilder<CategoryBloc, CategoryState>(
       builder: (context, state) {
-        final categories =
-            state is CategoryLoaded ? state.categories : <Category>[];
+        final categories = state is CategoryLoaded
+            ? state.categories
+            : <Category>[];
         return DropdownButton<String?>(
           value: _selectedCategoryId,
           hint: const Text('Category'),
@@ -123,8 +124,9 @@ class _FilterBarState extends State<FilterBar> {
           onSelected: (tagId) {
             setState(() {
               if (_selectedTagIds.contains(tagId)) {
-                _selectedTagIds =
-                    _selectedTagIds.where((id) => id != tagId).toList();
+                _selectedTagIds = _selectedTagIds
+                    .where((id) => id != tagId)
+                    .toList();
               } else {
                 _selectedTagIds = [..._selectedTagIds, tagId];
               }
@@ -147,7 +149,9 @@ class _FilterBarState extends State<FilterBar> {
           value: null,
           child: Text('All Priorities'),
         ),
-        ...Priority.values.where((p) => p != Priority.none).map(
+        ...Priority.values
+            .where((p) => p != Priority.none)
+            .map(
               (p) => DropdownMenuItem<Priority?>(
                 value: p,
                 child: Text(p.name[0].toUpperCase() + p.name.substring(1)),
@@ -172,11 +176,11 @@ class _FilterBarState extends State<FilterBar> {
 
   void _dispatchFilter() {
     context.read<TaskBloc>().add(
-          FilterTasks(
-            categoryId: _selectedCategoryId,
-            tagIds: _selectedTagIds,
-            priority: _selectedPriority,
-          ),
-        );
+      FilterTasks(
+        categoryId: _selectedCategoryId,
+        tagIds: _selectedTagIds,
+        priority: _selectedPriority,
+      ),
+    );
   }
 }

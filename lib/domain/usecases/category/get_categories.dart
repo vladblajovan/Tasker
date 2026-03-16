@@ -1,5 +1,5 @@
-import 'package:test_app/domain/entities/category.dart';
-import 'package:test_app/domain/repositories/category_repository.dart';
+import 'package:tasker/domain/entities/category.dart';
+import 'package:tasker/domain/repositories/category_repository.dart';
 
 class GetCategories {
   GetCategories(this._categoryRepository);

@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:test_app/domain/entities/task.dart';
+import 'package:tasker/domain/entities/task.dart';
 
 abstract class NotificationEvent extends Equatable {
   const NotificationEvent();

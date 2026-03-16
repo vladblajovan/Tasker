@@ -1,7 +1,7 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart'
     as fln;
 import 'package:timezone/timezone.dart' as tz;
-import 'package:test_app/data/models/task_model.dart';
+import 'package:tasker/data/models/task_model.dart';
 
 abstract class NotificationLocalDatasource {
   Future<void> initialize();
@@ -17,8 +17,9 @@ class NotificationLocalDatasourceImpl implements NotificationLocalDatasource {
 
   @override
   Future<void> initialize() async {
-    const androidSettings =
-        fln.AndroidInitializationSettings('@mipmap/ic_launcher');
+    const androidSettings = fln.AndroidInitializationSettings(
+      '@mipmap/ic_launcher',
+    );
     const darwinSettings = fln.DarwinInitializationSettings(
       requestAlertPermission: true,
       requestBadgePermission: true,

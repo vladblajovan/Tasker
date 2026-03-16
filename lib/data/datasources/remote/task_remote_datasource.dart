@@ -1,9 +1,9 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:test_app/data/datasources/task_local_datasource.dart';
-import 'package:test_app/data/models/recurrence_model.dart';
-import 'package:test_app/data/models/task_model.dart';
-import 'package:test_app/domain/entities/priority.dart';
-import 'package:test_app/domain/entities/recurrence.dart';
+import 'package:tasker/data/datasources/task_local_datasource.dart';
+import 'package:tasker/data/models/recurrence_model.dart';
+import 'package:tasker/data/models/task_model.dart';
+import 'package:tasker/domain/entities/priority.dart';
+import 'package:tasker/domain/entities/recurrence.dart';
 
 class TaskRemoteDatasourceImpl implements TaskLocalDatasource {
   TaskRemoteDatasourceImpl(this._client, this._localDatasource);

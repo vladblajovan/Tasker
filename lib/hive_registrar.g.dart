@@ -3,10 +3,10 @@
 // Check in to version control
 
 import 'package:hive_ce/hive_ce.dart';
-import 'package:test_app/data/models/category_model.dart';
-import 'package:test_app/data/models/recurrence_model.dart';
-import 'package:test_app/data/models/tag_model.dart';
-import 'package:test_app/data/models/task_model.dart';
+import 'package:tasker/data/models/category_model.dart';
+import 'package:tasker/data/models/recurrence_model.dart';
+import 'package:tasker/data/models/tag_model.dart';
+import 'package:tasker/data/models/task_model.dart';
 
 extension HiveRegistrar on HiveInterface {
   void registerAdapters() {

@@ -1,6 +1,6 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:test_app/data/datasources/category_local_datasource.dart';
-import 'package:test_app/data/models/category_model.dart';
+import 'package:tasker/data/datasources/category_local_datasource.dart';
+import 'package:tasker/data/models/category_model.dart';
 
 class CategoryRemoteDatasourceImpl implements CategoryLocalDatasource {
   CategoryRemoteDatasourceImpl(this._client, this._localDatasource);

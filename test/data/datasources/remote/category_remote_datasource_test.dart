@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:test_app/data/datasources/remote/category_remote_datasource.dart';
-import 'package:test_app/data/models/category_model.dart';
+import 'package:tasker/data/datasources/remote/category_remote_datasource.dart';
+import 'package:tasker/data/models/category_model.dart';
 
 void main() {
   final now = DateTime(2026, 1, 1);

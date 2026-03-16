@@ -1,8 +1,8 @@
-import 'package:test_app/core/error/failures.dart';
-import 'package:test_app/domain/entities/recurrence.dart';
-import 'package:test_app/domain/entities/task.dart';
-import 'package:test_app/domain/repositories/notification_repository.dart';
-import 'package:test_app/domain/repositories/task_repository.dart';
+import 'package:tasker/core/error/failures.dart';
+import 'package:tasker/domain/entities/recurrence.dart';
+import 'package:tasker/domain/entities/task.dart';
+import 'package:tasker/domain/repositories/notification_repository.dart';
+import 'package:tasker/domain/repositories/task_repository.dart';
 import 'package:uuid/uuid.dart';
 
 class ToggleTask {
@@ -53,7 +53,8 @@ class ToggleTask {
       );
 
       if (nextDueDate != null) {
-        final shouldCreate = task.recurrence!.endDate == null ||
+        final shouldCreate =
+            task.recurrence!.endDate == null ||
             nextDueDate.isBefore(task.recurrence!.endDate!) ||
             nextDueDate.isAtSameMomentAs(task.recurrence!.endDate!);
 

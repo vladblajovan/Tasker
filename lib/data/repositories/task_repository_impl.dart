@@ -1,7 +1,7 @@
-import 'package:test_app/data/datasources/task_local_datasource.dart';
-import 'package:test_app/data/models/task_model.dart';
-import 'package:test_app/domain/entities/task.dart';
-import 'package:test_app/domain/repositories/task_repository.dart';
+import 'package:tasker/data/datasources/task_local_datasource.dart';
+import 'package:tasker/data/models/task_model.dart';
+import 'package:tasker/domain/entities/task.dart';
+import 'package:tasker/domain/repositories/task_repository.dart';
 
 class TaskRepositoryImpl implements TaskRepository {
   TaskRepositoryImpl(this._datasource);

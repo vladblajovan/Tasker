@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:test_app/domain/entities/category.dart';
+import 'package:tasker/domain/entities/category.dart';
 
 class CategoryChip extends StatelessWidget {
   const CategoryChip({
@@ -26,8 +26,7 @@ class CategoryChip extends StatelessWidget {
             fontSize: 12,
           ),
         ),
-        backgroundColor:
-            selected ? color : color.withValues(alpha: 0.1),
+        backgroundColor: selected ? color : color.withValues(alpha: 0.1),
         side: BorderSide(color: color),
         visualDensity: VisualDensity.compact,
         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,

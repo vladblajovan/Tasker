@@ -24,10 +24,10 @@ After completing a task, if you added any TODOs to the code or didn't fully impl
 - [ ] After commiting the change, if an app is running, use the hot_reload tool to reload it.
 
 ## Phase 2: Android Level Renaming
-- [ ] Update `android/app/build.gradle.kts`: change `namespace` and `applicationId` to `com.example.tasker`.
+- [ ] Update `android/app/build.gradle.kts`: change `namespace` and `applicationId` to `com.vladblajovan.tasker`.
 - [ ] Update `android/app/src/main/AndroidManifest.xml`: change `android:label` to `Tasker`.
-- [ ] Move `MainActivity.kt` from `android/app/src/main/kotlin/com/example/test_app/` to `android/app/src/main/kotlin/com/example/tasker/`.
-- [ ] Update `package` declaration in `MainActivity.kt` to `package com.example.tasker`.
+- [ ] Move `MainActivity.kt` from `android/app/src/main/kotlin/com/example/test_app/` to `android/app/src/main/kotlin/com/vladblajovan/tasker/`.
+- [ ] Update `package` declaration in `MainActivity.kt` to `package com.vladblajovan.tasker`.
 - [ ] Create/modify unit tests for testing the code added or modified in this phase, if relevant.
 - [ ] Run the `dart fix --apply` tool to clean up the code.
 - [ ] Run the `flutter analyze` tool one more time and fix any issues.
@@ -40,7 +40,7 @@ After completing a task, if you added any TODOs to the code or didn't fully impl
 - [ ] After commiting the change, if an app is running, use the hot_reload tool to reload it.
 
 ## Phase 3: iOS & Web Level Renaming
-- [ ] Update `ios/Runner.xcodeproj/project.pbxproj`: replace `com.example.testApp` with `com.example.tasker`.
+- [ ] Update `ios/Runner.xcodeproj/project.pbxproj`: replace `com.example.testApp` with `com.vladblajovan.tasker`.
 - [ ] Update `ios/Runner/Info.plist`: change `CFBundleName` to `Tasker` and `CFBundleDisplayName` to `Tasker`.
 - [ ] Update `web/index.html`: change `<title>` content to `Tasker`.
 - [ ] Update `web/manifest.json`: change `name` and `short_name` to `Tasker`.

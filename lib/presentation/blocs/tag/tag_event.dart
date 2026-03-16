@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:test_app/domain/entities/tag.dart';
+import 'package:tasker/domain/entities/tag.dart';
 
 abstract class TagEvent extends Equatable {
   const TagEvent();

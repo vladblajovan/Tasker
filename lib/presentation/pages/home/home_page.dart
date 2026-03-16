@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:test_app/presentation/blocs/category/category_bloc.dart';
-import 'package:test_app/presentation/blocs/category/category_event.dart';
-import 'package:test_app/presentation/blocs/category/category_state.dart';
-import 'package:test_app/presentation/blocs/notification/notification_bloc.dart';
-import 'package:test_app/presentation/blocs/notification/notification_state.dart';
-import 'package:test_app/presentation/blocs/tag/tag_bloc.dart';
-import 'package:test_app/presentation/blocs/tag/tag_event.dart';
-import 'package:test_app/presentation/blocs/tag/tag_state.dart';
-import 'package:test_app/presentation/blocs/task/task_bloc.dart';
-import 'package:test_app/presentation/blocs/task/task_event.dart';
-import 'package:test_app/presentation/blocs/task/task_state.dart';
-import 'package:test_app/presentation/pages/category/category_management_page.dart';
-import 'package:test_app/presentation/pages/tag/tag_management_page.dart';
-import 'package:test_app/presentation/widgets/filter_bar.dart';
-import 'package:test_app/presentation/widgets/task_tile.dart';
+import 'package:tasker/presentation/blocs/category/category_bloc.dart';
+import 'package:tasker/presentation/blocs/category/category_event.dart';
+import 'package:tasker/presentation/blocs/category/category_state.dart';
+import 'package:tasker/presentation/blocs/notification/notification_bloc.dart';
+import 'package:tasker/presentation/blocs/notification/notification_state.dart';
+import 'package:tasker/presentation/blocs/tag/tag_bloc.dart';
+import 'package:tasker/presentation/blocs/tag/tag_event.dart';
+import 'package:tasker/presentation/blocs/tag/tag_state.dart';
+import 'package:tasker/presentation/blocs/task/task_bloc.dart';
+import 'package:tasker/presentation/blocs/task/task_event.dart';
+import 'package:tasker/presentation/blocs/task/task_state.dart';
+import 'package:tasker/presentation/pages/category/category_management_page.dart';
+import 'package:tasker/presentation/pages/tag/tag_management_page.dart';
+import 'package:tasker/presentation/widgets/filter_bar.dart';
+import 'package:tasker/presentation/widgets/task_tile.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -36,11 +36,11 @@ class _HomePageState extends State<HomePage> {
   }
 
   String get _appBarTitle => switch (_currentIndex) {
-        0 => 'Tasks',
-        1 => 'Categories',
-        2 => 'Tags',
-        _ => 'Tasks',
-      };
+    0 => 'Tasks',
+    1 => 'Categories',
+    2 => 'Tags',
+    _ => 'Tasks',
+  };
 
   Widget _buildTaskList() {
     return Column(
@@ -135,15 +135,13 @@ class _HomePageState extends State<HomePage> {
               IconButton(
                 icon: const Icon(Icons.add),
                 tooltip: 'Add Category',
-                onPressed: () =>
-                    CategoryManagementPage.showAddDialog(context),
+                onPressed: () => CategoryManagementPage.showAddDialog(context),
               ),
             if (_currentIndex == 2)
               IconButton(
                 icon: const Icon(Icons.add),
                 tooltip: 'Add Tag',
-                onPressed: () =>
-                    TagManagementPage.showAddDialog(context),
+                onPressed: () => TagManagementPage.showAddDialog(context),
               ),
           ],
         ),
@@ -160,18 +158,12 @@ class _HomePageState extends State<HomePage> {
             setState(() => _currentIndex = index);
           },
           destinations: const [
-            NavigationDestination(
-              icon: Icon(Icons.checklist),
-              label: 'Tasks',
-            ),
+            NavigationDestination(icon: Icon(Icons.checklist), label: 'Tasks'),
             NavigationDestination(
               icon: Icon(Icons.category),
               label: 'Categories',
             ),
-            NavigationDestination(
-              icon: Icon(Icons.label),
-              label: 'Tags',
-            ),
+            NavigationDestination(icon: Icon(Icons.label), label: 'Tags'),
           ],
         ),
       ),

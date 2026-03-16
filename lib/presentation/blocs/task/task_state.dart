@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
-import 'package:test_app/domain/entities/priority.dart';
-import 'package:test_app/domain/entities/task.dart';
+import 'package:tasker/domain/entities/priority.dart';
+import 'package:tasker/domain/entities/task.dart';
 
 abstract class TaskState extends Equatable {
   const TaskState();
@@ -34,12 +34,12 @@ class TaskLoaded extends TaskState {
 
   @override
   List<Object?> get props => [
-        allTasks,
-        filteredTasks,
-        filterCategoryId,
-        filterTagIds,
-        filterPriority,
-      ];
+    allTasks,
+    filteredTasks,
+    filterCategoryId,
+    filterTagIds,
+    filterPriority,
+  ];
 
   TaskLoaded copyWith({
     List<Task>? allTasks,
@@ -53,11 +53,13 @@ class TaskLoaded extends TaskState {
     return TaskLoaded(
       allTasks: allTasks ?? this.allTasks,
       filteredTasks: filteredTasks ?? this.filteredTasks,
-      filterCategoryId:
-          clearCategoryId ? null : (filterCategoryId ?? this.filterCategoryId),
+      filterCategoryId: clearCategoryId
+          ? null
+          : (filterCategoryId ?? this.filterCategoryId),
       filterTagIds: filterTagIds ?? this.filterTagIds,
-      filterPriority:
-          clearPriority ? null : (filterPriority ?? this.filterPriority),
+      filterPriority: clearPriority
+          ? null
+          : (filterPriority ?? this.filterPriority),
     );
   }
 }

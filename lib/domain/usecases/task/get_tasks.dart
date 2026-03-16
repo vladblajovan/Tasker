@@ -1,5 +1,5 @@
-import 'package:test_app/domain/entities/task.dart';
-import 'package:test_app/domain/repositories/task_repository.dart';
+import 'package:tasker/domain/entities/task.dart';
+import 'package:tasker/domain/repositories/task_repository.dart';
 
 class GetTasks {
   GetTasks(this._taskRepository);

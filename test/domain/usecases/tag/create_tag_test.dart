@@ -1,9 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:test_app/core/error/failures.dart';
-import 'package:test_app/domain/entities/tag.dart';
-import 'package:test_app/domain/repositories/tag_repository.dart';
-import 'package:test_app/domain/usecases/tag/create_tag.dart';
+import 'package:tasker/core/error/failures.dart';
+import 'package:tasker/domain/entities/tag.dart';
+import 'package:tasker/domain/repositories/tag_repository.dart';
+import 'package:tasker/domain/usecases/tag/create_tag.dart';
 
 class MockTagRepository extends Mock implements TagRepository {}
 
@@ -24,8 +24,7 @@ void main() {
 
   group('CreateTag', () {
     test('should create a tag via the repository', () async {
-      when(() => mockTagRepository.createTag(tTag))
-          .thenAnswer((_) async {});
+      when(() => mockTagRepository.createTag(tTag)).thenAnswer((_) async {});
 
       await useCase.call(tTag);
 
@@ -36,24 +35,23 @@ void main() {
     test('should throw ValidationFailure when name is empty', () async {
       final invalidTag = tTag.copyWith(name: '');
 
-      expect(
-        () => useCase.call(invalidTag),
-        throwsA(isA<ValidationFailure>()),
-      );
+      expect(() => useCase.call(invalidTag), throwsA(isA<ValidationFailure>()));
 
       verifyZeroInteractions(mockTagRepository);
     });
 
-    test('should throw ValidationFailure when name is only whitespace',
-        () async {
-      final invalidTag = tTag.copyWith(name: '   ');
+    test(
+      'should throw ValidationFailure when name is only whitespace',
+      () async {
+        final invalidTag = tTag.copyWith(name: '   ');
 
-      expect(
-        () => useCase.call(invalidTag),
-        throwsA(isA<ValidationFailure>()),
-      );
+        expect(
+          () => useCase.call(invalidTag),
+          throwsA(isA<ValidationFailure>()),
+        );
 
-      verifyZeroInteractions(mockTagRepository);
-    });
+        verifyZeroInteractions(mockTagRepository);
+      },
+    );
   });
 }

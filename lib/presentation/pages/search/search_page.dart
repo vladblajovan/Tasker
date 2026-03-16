@@ -3,10 +3,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:test_app/domain/entities/task.dart';
-import 'package:test_app/presentation/blocs/task/task_bloc.dart';
-import 'package:test_app/presentation/blocs/task/task_state.dart';
-import 'package:test_app/presentation/widgets/task_tile.dart';
+import 'package:tasker/domain/entities/task.dart';
+import 'package:tasker/presentation/blocs/task/task_bloc.dart';
+import 'package:tasker/presentation/blocs/task/task_state.dart';
+import 'package:tasker/presentation/widgets/task_tile.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});

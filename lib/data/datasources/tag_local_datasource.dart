@@ -1,5 +1,5 @@
 import 'package:hive_ce/hive.dart';
-import 'package:test_app/data/models/tag_model.dart';
+import 'package:tasker/data/models/tag_model.dart';
 
 abstract class TagLocalDatasource {
   Future<List<TagModel>> getAllTags();

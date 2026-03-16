@@ -1,4 +1,4 @@
-import 'package:test_app/domain/entities/tag.dart';
+import 'package:tasker/domain/entities/tag.dart';
 
 abstract class TagRepository {
   Future<List<Tag>> getAllTags();

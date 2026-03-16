@@ -1,4 +1,4 @@
-import 'package:test_app/domain/entities/task.dart';
+import 'package:tasker/domain/entities/task.dart';
 
 abstract class NotificationRepository {
   Future<void> scheduleNotification(Task task);

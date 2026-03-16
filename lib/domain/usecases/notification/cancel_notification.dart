@@ -1,4 +1,4 @@
-import 'package:test_app/domain/repositories/notification_repository.dart';
+import 'package:tasker/domain/repositories/notification_repository.dart';
 
 class CancelNotification {
   CancelNotification(this._notificationRepository);

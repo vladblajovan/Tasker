@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:test_app/core/di/injection.dart';
-import 'package:test_app/core/router/app_router.dart';
-import 'package:test_app/core/theme/app_theme.dart';
-import 'package:test_app/presentation/blocs/category/category_bloc.dart';
-import 'package:test_app/presentation/blocs/notification/notification_bloc.dart';
-import 'package:test_app/presentation/blocs/tag/tag_bloc.dart';
-import 'package:test_app/presentation/blocs/task/task_bloc.dart';
+import 'package:tasker/core/di/injection.dart';
+import 'package:tasker/core/router/app_router.dart';
+import 'package:tasker/core/theme/app_theme.dart';
+import 'package:tasker/presentation/blocs/category/category_bloc.dart';
+import 'package:tasker/presentation/blocs/notification/notification_bloc.dart';
+import 'package:tasker/presentation/blocs/tag/tag_bloc.dart';
+import 'package:tasker/presentation/blocs/task/task_bloc.dart';
 
 class TodoApp extends StatelessWidget {
   const TodoApp({super.key});

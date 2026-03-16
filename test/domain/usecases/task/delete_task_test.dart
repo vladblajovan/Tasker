@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:test_app/domain/entities/task.dart';
-import 'package:test_app/domain/repositories/task_repository.dart';
-import 'package:test_app/domain/usecases/task/delete_task.dart';
+import 'package:tasker/domain/entities/task.dart';
+import 'package:tasker/domain/repositories/task_repository.dart';
+import 'package:tasker/domain/usecases/task/delete_task.dart';
 
 class MockTaskRepository extends Mock implements TaskRepository {}
 
@@ -32,10 +32,10 @@ void main() {
         updatedAt: DateTime(2026, 1, 1),
       );
 
-      when(() => mockTaskRepository.getTasksByParentId('1'))
-          .thenAnswer((_) async => [subtask1, subtask2]);
-      when(() => mockTaskRepository.deleteTask(any()))
-          .thenAnswer((_) async {});
+      when(
+        () => mockTaskRepository.getTasksByParentId('1'),
+      ).thenAnswer((_) async => [subtask1, subtask2]);
+      when(() => mockTaskRepository.deleteTask(any())).thenAnswer((_) async {});
 
       await useCase.call('1');
 
@@ -46,10 +46,10 @@ void main() {
     });
 
     test('should delete a task with no subtasks', () async {
-      when(() => mockTaskRepository.getTasksByParentId('1'))
-          .thenAnswer((_) async => []);
-      when(() => mockTaskRepository.deleteTask('1'))
-          .thenAnswer((_) async {});
+      when(
+        () => mockTaskRepository.getTasksByParentId('1'),
+      ).thenAnswer((_) async => []);
+      when(() => mockTaskRepository.deleteTask('1')).thenAnswer((_) async {});
 
       await useCase.call('1');
 

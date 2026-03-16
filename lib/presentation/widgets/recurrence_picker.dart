@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:test_app/domain/entities/recurrence.dart';
+import 'package:tasker/domain/entities/recurrence.dart';
 
 class RecurrencePicker extends StatefulWidget {
   const RecurrencePicker({
@@ -44,8 +44,8 @@ class _RecurrencePickerState extends State<RecurrencePicker> {
       Recurrence(
         type: _type,
         interval: _interval,
-        weekdays: (_type == RecurrenceType.weekly ||
-                _type == RecurrenceType.custom)
+        weekdays:
+            (_type == RecurrenceType.weekly || _type == RecurrenceType.custom)
             ? (_weekdays.isEmpty ? null : _weekdays)
             : null,
         endDate: _endDate,
@@ -100,9 +100,7 @@ class _RecurrencePickerState extends State<RecurrencePicker> {
                 .map(
                   (t) => DropdownMenuItem(
                     value: t,
-                    child: Text(
-                      t.name[0].toUpperCase() + t.name.substring(1),
-                    ),
+                    child: Text(t.name[0].toUpperCase() + t.name.substring(1)),
                   ),
                 )
                 .toList(),
@@ -116,9 +114,7 @@ class _RecurrencePickerState extends State<RecurrencePicker> {
           const SizedBox(height: 12),
           TextFormField(
             initialValue: _interval.toString(),
-            decoration: const InputDecoration(
-              labelText: 'Every N intervals',
-            ),
+            decoration: const InputDecoration(labelText: 'Every N intervals'),
             keyboardType: TextInputType.number,
             onChanged: (value) {
               final parsed = int.tryParse(value);
@@ -161,8 +157,7 @@ class _RecurrencePickerState extends State<RecurrencePicker> {
                       context: context,
                       initialDate: _endDate ?? DateTime.now(),
                       firstDate: DateTime.now(),
-                      lastDate:
-                          DateTime.now().add(const Duration(days: 3650)),
+                      lastDate: DateTime.now().add(const Duration(days: 3650)),
                     );
                     if (picked != null) {
                       setState(() => _endDate = picked);

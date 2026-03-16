@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
-import 'package:test_app/domain/entities/priority.dart';
-import 'package:test_app/domain/entities/task.dart';
+import 'package:tasker/domain/entities/priority.dart';
+import 'package:tasker/domain/entities/task.dart';
 
 abstract class TaskEvent extends Equatable {
   const TaskEvent();
@@ -50,11 +50,7 @@ class ToggleTaskEvent extends TaskEvent {
 }
 
 class FilterTasks extends TaskEvent {
-  const FilterTasks({
-    this.categoryId,
-    this.tagIds = const [],
-    this.priority,
-  });
+  const FilterTasks({this.categoryId, this.tagIds = const [], this.priority});
 
   final String? categoryId;
   final List<String> tagIds;

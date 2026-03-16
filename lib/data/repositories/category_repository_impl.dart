@@ -1,7 +1,7 @@
-import 'package:test_app/data/datasources/category_local_datasource.dart';
-import 'package:test_app/data/models/category_model.dart';
-import 'package:test_app/domain/entities/category.dart';
-import 'package:test_app/domain/repositories/category_repository.dart';
+import 'package:tasker/data/datasources/category_local_datasource.dart';
+import 'package:tasker/data/models/category_model.dart';
+import 'package:tasker/domain/entities/category.dart';
+import 'package:tasker/domain/repositories/category_repository.dart';
 
 class CategoryRepositoryImpl implements CategoryRepository {
   CategoryRepositoryImpl(this._datasource);

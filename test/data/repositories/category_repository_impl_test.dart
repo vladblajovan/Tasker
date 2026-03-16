@@ -1,9 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:test_app/data/datasources/category_local_datasource.dart';
-import 'package:test_app/data/models/category_model.dart';
-import 'package:test_app/data/repositories/category_repository_impl.dart';
-import 'package:test_app/domain/entities/category.dart';
+import 'package:tasker/data/datasources/category_local_datasource.dart';
+import 'package:tasker/data/models/category_model.dart';
+import 'package:tasker/data/repositories/category_repository_impl.dart';
+import 'package:tasker/domain/entities/category.dart';
 
 class MockCategoryLocalDatasource extends Mock
     implements CategoryLocalDatasource {}
@@ -41,8 +41,9 @@ void main() {
 
   group('getAllCategories', () {
     test('should return list of categories from datasource', () async {
-      when(() => mockDatasource.getAllCategories())
-          .thenAnswer((_) async => [tCategoryModel]);
+      when(
+        () => mockDatasource.getAllCategories(),
+      ).thenAnswer((_) async => [tCategoryModel]);
 
       final result = await repository.getAllCategories();
 
@@ -55,8 +56,9 @@ void main() {
 
   group('getCategoryById', () {
     test('should return category when found', () async {
-      when(() => mockDatasource.getCategoryById('cat-1'))
-          .thenAnswer((_) async => tCategoryModel);
+      when(
+        () => mockDatasource.getCategoryById('cat-1'),
+      ).thenAnswer((_) async => tCategoryModel);
 
       final result = await repository.getCategoryById('cat-1');
 
@@ -66,8 +68,9 @@ void main() {
     });
 
     test('should return null when not found', () async {
-      when(() => mockDatasource.getCategoryById('cat-1'))
-          .thenAnswer((_) async => null);
+      when(
+        () => mockDatasource.getCategoryById('cat-1'),
+      ).thenAnswer((_) async => null);
 
       final result = await repository.getCategoryById('cat-1');
 
@@ -76,44 +79,51 @@ void main() {
   });
 
   group('createCategory', () {
-    test('should create category via datasource using fromEntity mapping',
-        () async {
-      when(() => mockDatasource.createCategory(any()))
-          .thenAnswer((_) async {});
+    test(
+      'should create category via datasource using fromEntity mapping',
+      () async {
+        when(
+          () => mockDatasource.createCategory(any()),
+        ).thenAnswer((_) async {});
 
-      await repository.createCategory(tCategory);
+        await repository.createCategory(tCategory);
 
-      final captured = verify(
-        () => mockDatasource.createCategory(captureAny()),
-      ).captured;
-      final model = captured.first as CategoryModel;
-      expect(model.id, tCategory.id);
-      expect(model.name, tCategory.name);
-      expect(model.color, tCategory.color);
-    });
+        final captured = verify(
+          () => mockDatasource.createCategory(captureAny()),
+        ).captured;
+        final model = captured.first as CategoryModel;
+        expect(model.id, tCategory.id);
+        expect(model.name, tCategory.name);
+        expect(model.color, tCategory.color);
+      },
+    );
   });
 
   group('updateCategory', () {
-    test('should update category via datasource using fromEntity mapping',
-        () async {
-      when(() => mockDatasource.updateCategory(any()))
-          .thenAnswer((_) async {});
+    test(
+      'should update category via datasource using fromEntity mapping',
+      () async {
+        when(
+          () => mockDatasource.updateCategory(any()),
+        ).thenAnswer((_) async {});
 
-      await repository.updateCategory(tCategory);
+        await repository.updateCategory(tCategory);
 
-      final captured = verify(
-        () => mockDatasource.updateCategory(captureAny()),
-      ).captured;
-      final model = captured.first as CategoryModel;
-      expect(model.id, tCategory.id);
-      expect(model.name, tCategory.name);
-    });
+        final captured = verify(
+          () => mockDatasource.updateCategory(captureAny()),
+        ).captured;
+        final model = captured.first as CategoryModel;
+        expect(model.id, tCategory.id);
+        expect(model.name, tCategory.name);
+      },
+    );
   });
 
   group('deleteCategory', () {
     test('should delete category via datasource', () async {
-      when(() => mockDatasource.deleteCategory('cat-1'))
-          .thenAnswer((_) async {});
+      when(
+        () => mockDatasource.deleteCategory('cat-1'),
+      ).thenAnswer((_) async {});
 
       await repository.deleteCategory('cat-1');
 

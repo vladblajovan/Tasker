@@ -1,7 +1,7 @@
-import 'package:test_app/data/datasources/tag_local_datasource.dart';
-import 'package:test_app/data/models/tag_model.dart';
-import 'package:test_app/domain/entities/tag.dart';
-import 'package:test_app/domain/repositories/tag_repository.dart';
+import 'package:tasker/data/datasources/tag_local_datasource.dart';
+import 'package:tasker/data/models/tag_model.dart';
+import 'package:tasker/domain/entities/tag.dart';
+import 'package:tasker/domain/repositories/tag_repository.dart';
 
 class TagRepositoryImpl implements TagRepository {
   TagRepositoryImpl(this._datasource);

@@ -1,10 +1,10 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:test_app/core/error/failures.dart';
-import 'package:test_app/domain/entities/priority.dart';
-import 'package:test_app/domain/entities/task.dart';
-import 'package:test_app/domain/repositories/task_repository.dart';
-import 'package:test_app/domain/usecases/task/create_task.dart';
+import 'package:tasker/core/error/failures.dart';
+import 'package:tasker/domain/entities/priority.dart';
+import 'package:tasker/domain/entities/task.dart';
+import 'package:tasker/domain/repositories/task_repository.dart';
+import 'package:tasker/domain/usecases/task/create_task.dart';
 
 class MockTaskRepository extends Mock implements TaskRepository {}
 
@@ -27,8 +27,7 @@ void main() {
 
   group('CreateTask', () {
     test('should create a task via the repository', () async {
-      when(() => mockTaskRepository.createTask(tTask))
-          .thenAnswer((_) async {});
+      when(() => mockTaskRepository.createTask(tTask)).thenAnswer((_) async {});
 
       await useCase.call(tTask);
 
@@ -47,25 +46,29 @@ void main() {
       verifyZeroInteractions(mockTaskRepository);
     });
 
-    test('should throw ValidationFailure when title is only whitespace',
-        () async {
-      final invalidTask = tTask.copyWith(title: '   ');
+    test(
+      'should throw ValidationFailure when title is only whitespace',
+      () async {
+        final invalidTask = tTask.copyWith(title: '   ');
 
-      expect(
-        () => useCase.call(invalidTask),
-        throwsA(isA<ValidationFailure>()),
-      );
+        expect(
+          () => useCase.call(invalidTask),
+          throwsA(isA<ValidationFailure>()),
+        );
 
-      verifyZeroInteractions(mockTaskRepository);
-    });
+        verifyZeroInteractions(mockTaskRepository);
+      },
+    );
 
     test('should allow creating a subtask (one level deep)', () async {
       final subtask = tTask.copyWith(parentTaskId: 'parent-1');
 
-      when(() => mockTaskRepository.getTaskById('parent-1'))
-          .thenAnswer((_) async => tTask);
-      when(() => mockTaskRepository.createTask(subtask))
-          .thenAnswer((_) async {});
+      when(
+        () => mockTaskRepository.getTaskById('parent-1'),
+      ).thenAnswer((_) async => tTask);
+      when(
+        () => mockTaskRepository.createTask(subtask),
+      ).thenAnswer((_) async {});
 
       await useCase.call(subtask);
 
@@ -74,35 +77,36 @@ void main() {
     });
 
     test(
-        'should throw ValidationFailure when creating a subtask of a subtask',
-        () async {
-      final parentSubtask = tTask.copyWith(
-        id: 'parent-sub',
-        parentTaskId: 'grandparent',
-      );
-      final nestedSubtask = tTask.copyWith(parentTaskId: 'parent-sub');
+      'should throw ValidationFailure when creating a subtask of a subtask',
+      () async {
+        final parentSubtask = tTask.copyWith(
+          id: 'parent-sub',
+          parentTaskId: 'grandparent',
+        );
+        final nestedSubtask = tTask.copyWith(parentTaskId: 'parent-sub');
 
-      when(() => mockTaskRepository.getTaskById('parent-sub'))
-          .thenAnswer((_) async => parentSubtask);
+        when(
+          () => mockTaskRepository.getTaskById('parent-sub'),
+        ).thenAnswer((_) async => parentSubtask);
 
-      expect(
-        () => useCase.call(nestedSubtask),
-        throwsA(isA<ValidationFailure>()),
-      );
-    });
+        expect(
+          () => useCase.call(nestedSubtask),
+          throwsA(isA<ValidationFailure>()),
+        );
+      },
+    );
 
     test(
-        'should throw NotFoundFailure when parent task does not exist',
-        () async {
-      final subtask = tTask.copyWith(parentTaskId: 'nonexistent');
+      'should throw NotFoundFailure when parent task does not exist',
+      () async {
+        final subtask = tTask.copyWith(parentTaskId: 'nonexistent');
 
-      when(() => mockTaskRepository.getTaskById('nonexistent'))
-          .thenAnswer((_) async => null);
+        when(
+          () => mockTaskRepository.getTaskById('nonexistent'),
+        ).thenAnswer((_) async => null);
 
-      expect(
-        () => useCase.call(subtask),
-        throwsA(isA<NotFoundFailure>()),
-      );
-    });
+        expect(() => useCase.call(subtask), throwsA(isA<NotFoundFailure>()));
+      },
+    );
   });
 }

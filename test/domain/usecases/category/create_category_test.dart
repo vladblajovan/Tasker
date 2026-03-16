@@ -1,9 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:test_app/core/error/failures.dart';
-import 'package:test_app/domain/entities/category.dart';
-import 'package:test_app/domain/repositories/category_repository.dart';
-import 'package:test_app/domain/usecases/category/create_category.dart';
+import 'package:tasker/core/error/failures.dart';
+import 'package:tasker/domain/entities/category.dart';
+import 'package:tasker/domain/repositories/category_repository.dart';
+import 'package:tasker/domain/usecases/category/create_category.dart';
 
 class MockCategoryRepository extends Mock implements CategoryRepository {}
 
@@ -26,8 +26,9 @@ void main() {
 
   group('CreateCategory', () {
     test('should create a category via the repository', () async {
-      when(() => mockCategoryRepository.createCategory(tCategory))
-          .thenAnswer((_) async {});
+      when(
+        () => mockCategoryRepository.createCategory(tCategory),
+      ).thenAnswer((_) async {});
 
       await useCase.call(tCategory);
 
@@ -46,16 +47,18 @@ void main() {
       verifyZeroInteractions(mockCategoryRepository);
     });
 
-    test('should throw ValidationFailure when name is only whitespace',
-        () async {
-      final invalidCategory = tCategory.copyWith(name: '   ');
+    test(
+      'should throw ValidationFailure when name is only whitespace',
+      () async {
+        final invalidCategory = tCategory.copyWith(name: '   ');
 
-      expect(
-        () => useCase.call(invalidCategory),
-        throwsA(isA<ValidationFailure>()),
-      );
+        expect(
+          () => useCase.call(invalidCategory),
+          throwsA(isA<ValidationFailure>()),
+        );
 
-      verifyZeroInteractions(mockCategoryRepository);
-    });
+        verifyZeroInteractions(mockCategoryRepository);
+      },
+    );
   });
 }

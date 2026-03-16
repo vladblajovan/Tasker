@@ -3,19 +3,19 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
-import 'package:test_app/domain/entities/category.dart';
-import 'package:test_app/domain/entities/priority.dart';
-import 'package:test_app/domain/entities/recurrence.dart';
-import 'package:test_app/domain/entities/tag.dart';
-import 'package:test_app/domain/entities/task.dart';
-import 'package:test_app/presentation/blocs/category/category_bloc.dart';
-import 'package:test_app/presentation/blocs/category/category_state.dart';
-import 'package:test_app/presentation/blocs/tag/tag_bloc.dart';
-import 'package:test_app/presentation/blocs/tag/tag_state.dart';
-import 'package:test_app/presentation/blocs/task/task_bloc.dart';
-import 'package:test_app/presentation/blocs/task/task_event.dart';
-import 'package:test_app/presentation/blocs/task/task_state.dart';
-import 'package:test_app/presentation/widgets/recurrence_picker.dart';
+import 'package:tasker/domain/entities/category.dart';
+import 'package:tasker/domain/entities/priority.dart';
+import 'package:tasker/domain/entities/recurrence.dart';
+import 'package:tasker/domain/entities/tag.dart';
+import 'package:tasker/domain/entities/task.dart';
+import 'package:tasker/presentation/blocs/category/category_bloc.dart';
+import 'package:tasker/presentation/blocs/category/category_state.dart';
+import 'package:tasker/presentation/blocs/tag/tag_bloc.dart';
+import 'package:tasker/presentation/blocs/tag/tag_state.dart';
+import 'package:tasker/presentation/blocs/task/task_bloc.dart';
+import 'package:tasker/presentation/blocs/task/task_event.dart';
+import 'package:tasker/presentation/blocs/task/task_state.dart';
+import 'package:tasker/presentation/widgets/recurrence_picker.dart';
 
 enum _TaskFormMode { create, edit, createSubtask }
 
@@ -50,10 +50,10 @@ class _TaskFormPageState extends State<TaskFormPage> {
   }
 
   String get _appBarTitle => switch (_mode) {
-        _TaskFormMode.create => 'New Task',
-        _TaskFormMode.edit => 'Edit Task',
-        _TaskFormMode.createSubtask => 'New Subtask',
-      };
+    _TaskFormMode.create => 'New Task',
+    _TaskFormMode.edit => 'Edit Task',
+    _TaskFormMode.createSubtask => 'New Subtask',
+  };
 
   @override
   void initState() {
@@ -149,8 +149,9 @@ class _TaskFormPageState extends State<TaskFormPage> {
   Widget _buildCategoryPicker() {
     return BlocBuilder<CategoryBloc, CategoryState>(
       builder: (context, state) {
-        final categories =
-            state is CategoryLoaded ? state.categories : <Category>[];
+        final categories = state is CategoryLoaded
+            ? state.categories
+            : <Category>[];
         return DropdownButtonFormField<String?>(
           initialValue: _categoryId,
           decoration: const InputDecoration(
@@ -158,10 +159,7 @@ class _TaskFormPageState extends State<TaskFormPage> {
             border: OutlineInputBorder(),
           ),
           items: [
-            const DropdownMenuItem<String?>(
-              value: null,
-              child: Text('None'),
-            ),
+            const DropdownMenuItem<String?>(value: null, child: Text('None')),
             ...categories.map(
               (c) => DropdownMenuItem<String?>(
                 value: c.id,
@@ -262,12 +260,7 @@ class _TaskFormPageState extends State<TaskFormPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(_appBarTitle),
-        actions: [
-          TextButton(
-            onPressed: _save,
-            child: const Text('Save'),
-          ),
-        ],
+        actions: [TextButton(onPressed: _save, child: const Text('Save'))],
       ),
       body: Form(
         key: _formKey,

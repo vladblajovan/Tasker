@@ -1,12 +1,12 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:test_app/core/error/failures.dart';
-import 'package:test_app/domain/entities/priority.dart';
-import 'package:test_app/domain/entities/recurrence.dart';
-import 'package:test_app/domain/entities/task.dart';
-import 'package:test_app/domain/repositories/notification_repository.dart';
-import 'package:test_app/domain/repositories/task_repository.dart';
-import 'package:test_app/domain/usecases/task/toggle_task.dart';
+import 'package:tasker/core/error/failures.dart';
+import 'package:tasker/domain/entities/priority.dart';
+import 'package:tasker/domain/entities/recurrence.dart';
+import 'package:tasker/domain/entities/task.dart';
+import 'package:tasker/domain/repositories/notification_repository.dart';
+import 'package:tasker/domain/repositories/task_repository.dart';
+import 'package:tasker/domain/usecases/task/toggle_task.dart';
 
 class MockTaskRepository extends Mock implements TaskRepository {}
 
@@ -44,12 +44,13 @@ void main() {
 
   group('ToggleTask', () {
     test('should mark an incomplete task as completed', () async {
-      when(() => mockTaskRepository.getTaskById('1'))
-          .thenAnswer((_) async => tTask);
-      when(() => mockTaskRepository.updateTask(any()))
-          .thenAnswer((_) async {});
-      when(() => mockNotificationRepository.cancelNotification('1'))
-          .thenAnswer((_) async {});
+      when(
+        () => mockTaskRepository.getTaskById('1'),
+      ).thenAnswer((_) async => tTask);
+      when(() => mockTaskRepository.updateTask(any())).thenAnswer((_) async {});
+      when(
+        () => mockNotificationRepository.cancelNotification('1'),
+      ).thenAnswer((_) async {});
 
       final result = await useCase.call('1', now: now);
 
@@ -57,8 +58,9 @@ void main() {
       expect(result.completedAt, now);
 
       verify(() => mockTaskRepository.updateTask(any())).called(1);
-      verify(() => mockNotificationRepository.cancelNotification('1'))
-          .called(1);
+      verify(
+        () => mockNotificationRepository.cancelNotification('1'),
+      ).called(1);
     });
 
     test('should mark a completed task as incomplete', () async {
@@ -67,12 +69,13 @@ void main() {
         completedAt: DateTime(2026, 3, 9),
       );
 
-      when(() => mockTaskRepository.getTaskById('1'))
-          .thenAnswer((_) async => completedTask);
-      when(() => mockTaskRepository.updateTask(any()))
-          .thenAnswer((_) async {});
-      when(() => mockNotificationRepository.scheduleNotification(any()))
-          .thenAnswer((_) async {});
+      when(
+        () => mockTaskRepository.getTaskById('1'),
+      ).thenAnswer((_) async => completedTask);
+      when(() => mockTaskRepository.updateTask(any())).thenAnswer((_) async {});
+      when(
+        () => mockNotificationRepository.scheduleNotification(any()),
+      ).thenAnswer((_) async {});
 
       final result = await useCase.call('1', now: now);
 
@@ -82,46 +85,50 @@ void main() {
       verify(() => mockTaskRepository.updateTask(any())).called(1);
     });
 
-    test('should reschedule notification when uncompleting task with due date',
-        () async {
-      final completedTask = tTask.copyWith(
-        isCompleted: true,
-        completedAt: DateTime(2026, 3, 9),
-        dueDate: DateTime(2026, 3, 15),
-      );
+    test(
+      'should reschedule notification when uncompleting task with due date',
+      () async {
+        final completedTask = tTask.copyWith(
+          isCompleted: true,
+          completedAt: DateTime(2026, 3, 9),
+          dueDate: DateTime(2026, 3, 15),
+        );
 
-      when(() => mockTaskRepository.getTaskById('1'))
-          .thenAnswer((_) async => completedTask);
-      when(() => mockTaskRepository.updateTask(any()))
-          .thenAnswer((_) async {});
-      when(() => mockNotificationRepository.scheduleNotification(any()))
-          .thenAnswer((_) async {});
+        when(
+          () => mockTaskRepository.getTaskById('1'),
+        ).thenAnswer((_) async => completedTask);
+        when(
+          () => mockTaskRepository.updateTask(any()),
+        ).thenAnswer((_) async {});
+        when(
+          () => mockNotificationRepository.scheduleNotification(any()),
+        ).thenAnswer((_) async {});
 
-      await useCase.call('1', now: now);
+        await useCase.call('1', now: now);
 
-      verify(() => mockNotificationRepository.scheduleNotification(any()))
-          .called(1);
-    });
+        verify(
+          () => mockNotificationRepository.scheduleNotification(any()),
+        ).called(1);
+      },
+    );
 
     test('should handle recurring daily task completion', () async {
       final recurringTask = tTask.copyWith(
-        recurrence: const Recurrence(
-          type: RecurrenceType.daily,
-          interval: 1,
-        ),
+        recurrence: const Recurrence(type: RecurrenceType.daily, interval: 1),
         dueDate: DateTime(2026, 3, 10),
       );
 
-      when(() => mockTaskRepository.getTaskById('1'))
-          .thenAnswer((_) async => recurringTask);
-      when(() => mockTaskRepository.updateTask(any()))
-          .thenAnswer((_) async {});
-      when(() => mockTaskRepository.createTask(any()))
-          .thenAnswer((_) async {});
-      when(() => mockNotificationRepository.cancelNotification('1'))
-          .thenAnswer((_) async {});
-      when(() => mockNotificationRepository.scheduleNotification(any()))
-          .thenAnswer((_) async {});
+      when(
+        () => mockTaskRepository.getTaskById('1'),
+      ).thenAnswer((_) async => recurringTask);
+      when(() => mockTaskRepository.updateTask(any())).thenAnswer((_) async {});
+      when(() => mockTaskRepository.createTask(any())).thenAnswer((_) async {});
+      when(
+        () => mockNotificationRepository.cancelNotification('1'),
+      ).thenAnswer((_) async {});
+      when(
+        () => mockNotificationRepository.scheduleNotification(any()),
+      ).thenAnswer((_) async {});
 
       final result = await useCase.call('1', now: now);
 
@@ -141,31 +148,31 @@ void main() {
       expect(newTask.recurrence, recurringTask.recurrence);
       expect(newTask.priority, Priority.medium);
 
-      verify(() => mockNotificationRepository.cancelNotification('1'))
-          .called(1);
-      verify(() => mockNotificationRepository.scheduleNotification(any()))
-          .called(1);
+      verify(
+        () => mockNotificationRepository.cancelNotification('1'),
+      ).called(1);
+      verify(
+        () => mockNotificationRepository.scheduleNotification(any()),
+      ).called(1);
     });
 
     test('should handle recurring weekly task completion', () async {
       final recurringTask = tTask.copyWith(
-        recurrence: const Recurrence(
-          type: RecurrenceType.weekly,
-          interval: 1,
-        ),
+        recurrence: const Recurrence(type: RecurrenceType.weekly, interval: 1),
         dueDate: DateTime(2026, 3, 10),
       );
 
-      when(() => mockTaskRepository.getTaskById('1'))
-          .thenAnswer((_) async => recurringTask);
-      when(() => mockTaskRepository.updateTask(any()))
-          .thenAnswer((_) async {});
-      when(() => mockTaskRepository.createTask(any()))
-          .thenAnswer((_) async {});
-      when(() => mockNotificationRepository.cancelNotification('1'))
-          .thenAnswer((_) async {});
-      when(() => mockNotificationRepository.scheduleNotification(any()))
-          .thenAnswer((_) async {});
+      when(
+        () => mockTaskRepository.getTaskById('1'),
+      ).thenAnswer((_) async => recurringTask);
+      when(() => mockTaskRepository.updateTask(any())).thenAnswer((_) async {});
+      when(() => mockTaskRepository.createTask(any())).thenAnswer((_) async {});
+      when(
+        () => mockNotificationRepository.cancelNotification('1'),
+      ).thenAnswer((_) async {});
+      when(
+        () => mockNotificationRepository.scheduleNotification(any()),
+      ).thenAnswer((_) async {});
 
       await useCase.call('1', now: now);
 
@@ -179,23 +186,21 @@ void main() {
 
     test('should handle recurring monthly task completion', () async {
       final recurringTask = tTask.copyWith(
-        recurrence: const Recurrence(
-          type: RecurrenceType.monthly,
-          interval: 1,
-        ),
+        recurrence: const Recurrence(type: RecurrenceType.monthly, interval: 1),
         dueDate: DateTime(2026, 3, 10),
       );
 
-      when(() => mockTaskRepository.getTaskById('1'))
-          .thenAnswer((_) async => recurringTask);
-      when(() => mockTaskRepository.updateTask(any()))
-          .thenAnswer((_) async {});
-      when(() => mockTaskRepository.createTask(any()))
-          .thenAnswer((_) async {});
-      when(() => mockNotificationRepository.cancelNotification('1'))
-          .thenAnswer((_) async {});
-      when(() => mockNotificationRepository.scheduleNotification(any()))
-          .thenAnswer((_) async {});
+      when(
+        () => mockTaskRepository.getTaskById('1'),
+      ).thenAnswer((_) async => recurringTask);
+      when(() => mockTaskRepository.updateTask(any())).thenAnswer((_) async {});
+      when(() => mockTaskRepository.createTask(any())).thenAnswer((_) async {});
+      when(
+        () => mockNotificationRepository.cancelNotification('1'),
+      ).thenAnswer((_) async {});
+      when(
+        () => mockNotificationRepository.scheduleNotification(any()),
+      ).thenAnswer((_) async {});
 
       await useCase.call('1', now: now);
 
@@ -209,23 +214,21 @@ void main() {
 
     test('should handle recurring task with interval > 1', () async {
       final recurringTask = tTask.copyWith(
-        recurrence: const Recurrence(
-          type: RecurrenceType.daily,
-          interval: 3,
-        ),
+        recurrence: const Recurrence(type: RecurrenceType.daily, interval: 3),
         dueDate: DateTime(2026, 3, 10),
       );
 
-      when(() => mockTaskRepository.getTaskById('1'))
-          .thenAnswer((_) async => recurringTask);
-      when(() => mockTaskRepository.updateTask(any()))
-          .thenAnswer((_) async {});
-      when(() => mockTaskRepository.createTask(any()))
-          .thenAnswer((_) async {});
-      when(() => mockNotificationRepository.cancelNotification('1'))
-          .thenAnswer((_) async {});
-      when(() => mockNotificationRepository.scheduleNotification(any()))
-          .thenAnswer((_) async {});
+      when(
+        () => mockTaskRepository.getTaskById('1'),
+      ).thenAnswer((_) async => recurringTask);
+      when(() => mockTaskRepository.updateTask(any())).thenAnswer((_) async {});
+      when(() => mockTaskRepository.createTask(any())).thenAnswer((_) async {});
+      when(
+        () => mockNotificationRepository.cancelNotification('1'),
+      ).thenAnswer((_) async {});
+      when(
+        () => mockNotificationRepository.scheduleNotification(any()),
+      ).thenAnswer((_) async {});
 
       await useCase.call('1', now: now);
 
@@ -237,28 +240,33 @@ void main() {
       expect(newTask.dueDate, DateTime(2026, 3, 13));
     });
 
-    test('should not create next occurrence if recurrence end date is passed',
-        () async {
-      final recurringTask = tTask.copyWith(
-        recurrence: Recurrence(
-          type: RecurrenceType.daily,
-          interval: 1,
-          endDate: DateTime(2026, 3, 10),
-        ),
-        dueDate: DateTime(2026, 3, 10),
-      );
+    test(
+      'should not create next occurrence if recurrence end date is passed',
+      () async {
+        final recurringTask = tTask.copyWith(
+          recurrence: Recurrence(
+            type: RecurrenceType.daily,
+            interval: 1,
+            endDate: DateTime(2026, 3, 10),
+          ),
+          dueDate: DateTime(2026, 3, 10),
+        );
 
-      when(() => mockTaskRepository.getTaskById('1'))
-          .thenAnswer((_) async => recurringTask);
-      when(() => mockTaskRepository.updateTask(any()))
-          .thenAnswer((_) async {});
-      when(() => mockNotificationRepository.cancelNotification('1'))
-          .thenAnswer((_) async {});
+        when(
+          () => mockTaskRepository.getTaskById('1'),
+        ).thenAnswer((_) async => recurringTask);
+        when(
+          () => mockTaskRepository.updateTask(any()),
+        ).thenAnswer((_) async {});
+        when(
+          () => mockNotificationRepository.cancelNotification('1'),
+        ).thenAnswer((_) async {});
 
-      await useCase.call('1', now: now);
+        await useCase.call('1', now: now);
 
-      verifyNever(() => mockTaskRepository.createTask(any()));
-    });
+        verifyNever(() => mockTaskRepository.createTask(any()));
+      },
+    );
 
     test('should handle custom recurrence with weekdays', () async {
       // March 10, 2026 is a Tuesday (weekday 2)
@@ -273,16 +281,17 @@ void main() {
         dueDate: DateTime(2026, 3, 10), // Tuesday
       );
 
-      when(() => mockTaskRepository.getTaskById('1'))
-          .thenAnswer((_) async => recurringTask);
-      when(() => mockTaskRepository.updateTask(any()))
-          .thenAnswer((_) async {});
-      when(() => mockTaskRepository.createTask(any()))
-          .thenAnswer((_) async {});
-      when(() => mockNotificationRepository.cancelNotification('1'))
-          .thenAnswer((_) async {});
-      when(() => mockNotificationRepository.scheduleNotification(any()))
-          .thenAnswer((_) async {});
+      when(
+        () => mockTaskRepository.getTaskById('1'),
+      ).thenAnswer((_) async => recurringTask);
+      when(() => mockTaskRepository.updateTask(any())).thenAnswer((_) async {});
+      when(() => mockTaskRepository.createTask(any())).thenAnswer((_) async {});
+      when(
+        () => mockNotificationRepository.cancelNotification('1'),
+      ).thenAnswer((_) async {});
+      when(
+        () => mockNotificationRepository.scheduleNotification(any()),
+      ).thenAnswer((_) async {});
 
       await useCase.call('1', now: now);
 
@@ -296,8 +305,9 @@ void main() {
     });
 
     test('should throw NotFoundFailure when task does not exist', () async {
-      when(() => mockTaskRepository.getTaskById('nonexistent'))
-          .thenAnswer((_) async => null);
+      when(
+        () => mockTaskRepository.getTaskById('nonexistent'),
+      ).thenAnswer((_) async => null);
 
       expect(
         () => useCase.call('nonexistent', now: now),
@@ -306,28 +316,29 @@ void main() {
     });
 
     test(
-        'should not toggle recurring flow when uncompleting a recurring task',
-        () async {
-      final completedRecurringTask = tTask.copyWith(
-        isCompleted: true,
-        completedAt: DateTime(2026, 3, 9),
-        recurrence: const Recurrence(
-          type: RecurrenceType.daily,
-          interval: 1,
-        ),
-      );
+      'should not toggle recurring flow when uncompleting a recurring task',
+      () async {
+        final completedRecurringTask = tTask.copyWith(
+          isCompleted: true,
+          completedAt: DateTime(2026, 3, 9),
+          recurrence: const Recurrence(type: RecurrenceType.daily, interval: 1),
+        );
 
-      when(() => mockTaskRepository.getTaskById('1'))
-          .thenAnswer((_) async => completedRecurringTask);
-      when(() => mockTaskRepository.updateTask(any()))
-          .thenAnswer((_) async {});
-      when(() => mockNotificationRepository.scheduleNotification(any()))
-          .thenAnswer((_) async {});
+        when(
+          () => mockTaskRepository.getTaskById('1'),
+        ).thenAnswer((_) async => completedRecurringTask);
+        when(
+          () => mockTaskRepository.updateTask(any()),
+        ).thenAnswer((_) async {});
+        when(
+          () => mockNotificationRepository.scheduleNotification(any()),
+        ).thenAnswer((_) async {});
 
-      final result = await useCase.call('1', now: now);
+        final result = await useCase.call('1', now: now);
 
-      expect(result.isCompleted, false);
-      verifyNever(() => mockTaskRepository.createTask(any()));
-    });
+        expect(result.isCompleted, false);
+        verifyNever(() => mockTaskRepository.createTask(any()));
+      },
+    );
   });
 }

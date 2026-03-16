@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:test_app/domain/entities/tag.dart';
+import 'package:tasker/domain/entities/tag.dart';
 
 class TagChip extends StatelessWidget {
   const TagChip({
@@ -26,8 +26,7 @@ class TagChip extends StatelessWidget {
             fontSize: 12,
           ),
         ),
-        backgroundColor:
-            selected ? primary : primary.withValues(alpha: 0.1),
+        backgroundColor: selected ? primary : primary.withValues(alpha: 0.1),
         side: BorderSide(color: primary),
         visualDensity: VisualDensity.compact,
         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,

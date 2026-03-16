@@ -1,4 +1,4 @@
-import 'package:test_app/domain/repositories/task_repository.dart';
+import 'package:tasker/domain/repositories/task_repository.dart';
 
 class DeleteTask {
   DeleteTask(this._taskRepository);

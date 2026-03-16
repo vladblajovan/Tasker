@@ -1,10 +1,10 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:test_app/data/datasources/notification_local_datasource.dart';
-import 'package:test_app/data/models/task_model.dart';
-import 'package:test_app/data/repositories/notification_repository_impl.dart';
-import 'package:test_app/domain/entities/priority.dart';
-import 'package:test_app/domain/entities/task.dart';
+import 'package:tasker/data/datasources/notification_local_datasource.dart';
+import 'package:tasker/data/models/task_model.dart';
+import 'package:tasker/data/repositories/notification_repository_impl.dart';
+import 'package:tasker/domain/entities/priority.dart';
+import 'package:tasker/domain/entities/task.dart';
 
 class MockNotificationLocalDatasource extends Mock
     implements NotificationLocalDatasource {}
@@ -35,27 +35,31 @@ void main() {
   );
 
   group('scheduleNotification', () {
-    test('should schedule notification via datasource using fromEntity mapping',
-        () async {
-      when(() => mockDatasource.scheduleNotification(any()))
-          .thenAnswer((_) async {});
+    test(
+      'should schedule notification via datasource using fromEntity mapping',
+      () async {
+        when(
+          () => mockDatasource.scheduleNotification(any()),
+        ).thenAnswer((_) async {});
 
-      await repository.scheduleNotification(tTask);
+        await repository.scheduleNotification(tTask);
 
-      final captured = verify(
-        () => mockDatasource.scheduleNotification(captureAny()),
-      ).captured;
-      final model = captured.first as TaskModel;
-      expect(model.id, tTask.id);
-      expect(model.title, tTask.title);
-      expect(model.dueDate, tTask.dueDate);
-    });
+        final captured = verify(
+          () => mockDatasource.scheduleNotification(captureAny()),
+        ).captured;
+        final model = captured.first as TaskModel;
+        expect(model.id, tTask.id);
+        expect(model.title, tTask.title);
+        expect(model.dueDate, tTask.dueDate);
+      },
+    );
   });
 
   group('cancelNotification', () {
     test('should cancel notification via datasource', () async {
-      when(() => mockDatasource.cancelNotification('1'))
-          .thenAnswer((_) async {});
+      when(
+        () => mockDatasource.cancelNotification('1'),
+      ).thenAnswer((_) async {});
 
       await repository.cancelNotification('1');
 
@@ -65,8 +69,9 @@ void main() {
 
   group('cancelAllNotifications', () {
     test('should cancel all notifications via datasource', () async {
-      when(() => mockDatasource.cancelAllNotifications())
-          .thenAnswer((_) async {});
+      when(
+        () => mockDatasource.cancelAllNotifications(),
+      ).thenAnswer((_) async {});
 
       await repository.cancelAllNotifications();
 

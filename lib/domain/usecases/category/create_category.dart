@@ -1,6 +1,6 @@
-import 'package:test_app/core/error/failures.dart';
-import 'package:test_app/domain/entities/category.dart';
-import 'package:test_app/domain/repositories/category_repository.dart';
+import 'package:tasker/core/error/failures.dart';
+import 'package:tasker/domain/entities/category.dart';
+import 'package:tasker/domain/repositories/category_repository.dart';
 
 class CreateCategory {
   CreateCategory(this._categoryRepository);

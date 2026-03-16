@@ -1,9 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:test_app/domain/entities/priority.dart';
-import 'package:test_app/domain/entities/task.dart';
-import 'package:test_app/domain/repositories/notification_repository.dart';
-import 'package:test_app/domain/usecases/notification/schedule_notification.dart';
+import 'package:tasker/domain/entities/priority.dart';
+import 'package:tasker/domain/entities/task.dart';
+import 'package:tasker/domain/repositories/notification_repository.dart';
+import 'package:tasker/domain/usecases/notification/schedule_notification.dart';
 
 class MockNotificationRepository extends Mock
     implements NotificationRepository {}
@@ -34,24 +34,28 @@ void main() {
 
   group('ScheduleNotification', () {
     test('should schedule a notification for a task with a due date', () async {
-      when(() => mockNotificationRepository.scheduleNotification(tTask))
-          .thenAnswer((_) async {});
+      when(
+        () => mockNotificationRepository.scheduleNotification(tTask),
+      ).thenAnswer((_) async {});
 
       await useCase.call(tTask);
 
-      verify(() => mockNotificationRepository.scheduleNotification(tTask))
-          .called(1);
+      verify(
+        () => mockNotificationRepository.scheduleNotification(tTask),
+      ).called(1);
       verifyNoMoreInteractions(mockNotificationRepository);
     });
 
-    test('should not schedule a notification for a task without a due date',
-        () async {
-      final taskWithoutDueDate = tTask.copyWith(dueDate: null);
+    test(
+      'should not schedule a notification for a task without a due date',
+      () async {
+        final taskWithoutDueDate = tTask.copyWith(dueDate: null);
 
-      await useCase.call(taskWithoutDueDate);
+        await useCase.call(taskWithoutDueDate);
 
-      verifyZeroInteractions(mockNotificationRepository);
-    });
+        verifyZeroInteractions(mockNotificationRepository);
+      },
+    );
 
     test('should not schedule a notification for a completed task', () async {
       final completedTask = tTask.copyWith(

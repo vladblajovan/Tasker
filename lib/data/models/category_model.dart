@@ -1,5 +1,5 @@
 import 'package:hive_ce/hive.dart';
-import 'package:test_app/domain/entities/category.dart';
+import 'package:tasker/domain/entities/category.dart';
 
 part 'category_model.g.dart';
 

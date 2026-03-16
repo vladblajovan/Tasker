@@ -1,10 +1,10 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:test_app/domain/usecases/tag/create_tag.dart';
-import 'package:test_app/domain/usecases/tag/delete_tag.dart';
-import 'package:test_app/domain/usecases/tag/get_tags.dart';
-import 'package:test_app/domain/usecases/tag/update_tag.dart';
-import 'package:test_app/presentation/blocs/tag/tag_event.dart';
-import 'package:test_app/presentation/blocs/tag/tag_state.dart';
+import 'package:tasker/domain/usecases/tag/create_tag.dart';
+import 'package:tasker/domain/usecases/tag/delete_tag.dart';
+import 'package:tasker/domain/usecases/tag/get_tags.dart';
+import 'package:tasker/domain/usecases/tag/update_tag.dart';
+import 'package:tasker/presentation/blocs/tag/tag_event.dart';
+import 'package:tasker/presentation/blocs/tag/tag_state.dart';
 
 class TagBloc extends Bloc<TagEvent, TagState> {
   TagBloc({
@@ -12,11 +12,11 @@ class TagBloc extends Bloc<TagEvent, TagState> {
     required CreateTag createTag,
     required UpdateTag updateTag,
     required DeleteTag deleteTag,
-  })  : _getTags = getTags,
-        _createTag = createTag,
-        _updateTag = updateTag,
-        _deleteTag = deleteTag,
-        super(const TagInitial()) {
+  }) : _getTags = getTags,
+       _createTag = createTag,
+       _updateTag = updateTag,
+       _deleteTag = deleteTag,
+       super(const TagInitial()) {
     on<LoadTags>(_onLoadTags);
     on<CreateTagEvent>(_onCreateTag);
     on<UpdateTagEvent>(_onUpdateTag);

@@ -2,12 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'recurrence.freezed.dart';
 
-enum RecurrenceType {
-  daily,
-  weekly,
-  monthly,
-  custom,
-}
+enum RecurrenceType { daily, weekly, monthly, custom }
 
 @freezed
 abstract class Recurrence with _$Recurrence {

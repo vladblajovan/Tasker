@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:test_app/domain/entities/priority.dart';
+import 'package:tasker/domain/entities/priority.dart';
 
 class PriorityBadge extends StatelessWidget {
   const PriorityBadge({super.key, required this.priority});
@@ -7,18 +7,18 @@ class PriorityBadge extends StatelessWidget {
   final Priority priority;
 
   Color get _color => switch (priority) {
-        Priority.high => Colors.red,
-        Priority.medium => Colors.orange,
-        Priority.low => Colors.blue,
-        Priority.none => Colors.grey,
-      };
+    Priority.high => Colors.red,
+    Priority.medium => Colors.orange,
+    Priority.low => Colors.blue,
+    Priority.none => Colors.grey,
+  };
 
   String get _label => switch (priority) {
-        Priority.high => 'High',
-        Priority.medium => 'Medium',
-        Priority.low => 'Low',
-        Priority.none => '',
-      };
+    Priority.high => 'High',
+    Priority.medium => 'Medium',
+    Priority.low => 'Low',
+    Priority.none => '',
+  };
 
   @override
   Widget build(BuildContext context) {

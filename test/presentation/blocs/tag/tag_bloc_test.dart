@@ -1,14 +1,14 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:test_app/domain/entities/tag.dart';
-import 'package:test_app/domain/usecases/tag/create_tag.dart';
-import 'package:test_app/domain/usecases/tag/delete_tag.dart';
-import 'package:test_app/domain/usecases/tag/get_tags.dart';
-import 'package:test_app/domain/usecases/tag/update_tag.dart';
-import 'package:test_app/presentation/blocs/tag/tag_bloc.dart';
-import 'package:test_app/presentation/blocs/tag/tag_event.dart';
-import 'package:test_app/presentation/blocs/tag/tag_state.dart';
+import 'package:tasker/domain/entities/tag.dart';
+import 'package:tasker/domain/usecases/tag/create_tag.dart';
+import 'package:tasker/domain/usecases/tag/delete_tag.dart';
+import 'package:tasker/domain/usecases/tag/get_tags.dart';
+import 'package:tasker/domain/usecases/tag/update_tag.dart';
+import 'package:tasker/presentation/blocs/tag/tag_bloc.dart';
+import 'package:tasker/presentation/blocs/tag/tag_event.dart';
+import 'package:tasker/presentation/blocs/tag/tag_state.dart';
 
 class MockGetTags extends Mock implements GetTags {}
 
@@ -36,11 +36,11 @@ void main() {
   final tTag2 = Tag(id: 'tag-2', name: 'Dart', createdAt: now);
 
   TagBloc buildBloc() => TagBloc(
-        getTags: mockGetTags,
-        createTag: mockCreateTag,
-        updateTag: mockUpdateTag,
-        deleteTag: mockDeleteTag,
-      );
+    getTags: mockGetTags,
+    createTag: mockCreateTag,
+    updateTag: mockUpdateTag,
+    deleteTag: mockDeleteTag,
+  );
 
   setUp(() {
     mockGetTags = MockGetTags();
@@ -59,9 +59,7 @@ void main() {
         'emits [TagLoading, TagLoaded] with tags',
         build: buildBloc,
         setUp: () {
-          when(() => mockGetTags()).thenAnswer(
-            (_) async => [tTag1, tTag2],
-          );
+          when(() => mockGetTags()).thenAnswer((_) async => [tTag1, tTag2]);
         },
         act: (bloc) => bloc.add(const LoadTags()),
         expect: () => [
@@ -77,10 +75,7 @@ void main() {
           when(() => mockGetTags()).thenThrow(Exception('DB error'));
         },
         act: (bloc) => bloc.add(const LoadTags()),
-        expect: () => [
-          const TagLoading(),
-          isA<TagError>(),
-        ],
+        expect: () => [const TagLoading(), isA<TagError>()],
       );
     });
 
@@ -93,10 +88,7 @@ void main() {
           when(() => mockGetTags()).thenAnswer((_) async => [tTag1]);
         },
         act: (bloc) => bloc.add(CreateTagEvent(tTag1)),
-        expect: () => [
-          const TagLoading(),
-          isA<TagLoaded>(),
-        ],
+        expect: () => [const TagLoading(), isA<TagLoaded>()],
         verify: (_) {
           verify(() => mockCreateTag(tTag1)).called(1);
         },
@@ -122,10 +114,7 @@ void main() {
           when(() => mockGetTags()).thenAnswer((_) async => [tTag1]);
         },
         act: (bloc) => bloc.add(UpdateTagEvent(tTag1)),
-        expect: () => [
-          const TagLoading(),
-          isA<TagLoaded>(),
-        ],
+        expect: () => [const TagLoading(), isA<TagLoaded>()],
         verify: (_) {
           verify(() => mockUpdateTag(tTag1)).called(1);
         },

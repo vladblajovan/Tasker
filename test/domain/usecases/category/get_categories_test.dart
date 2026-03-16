@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:test_app/domain/entities/category.dart';
-import 'package:test_app/domain/repositories/category_repository.dart';
-import 'package:test_app/domain/usecases/category/get_categories.dart';
+import 'package:tasker/domain/entities/category.dart';
+import 'package:tasker/domain/repositories/category_repository.dart';
+import 'package:tasker/domain/usecases/category/get_categories.dart';
 
 class MockCategoryRepository extends Mock implements CategoryRepository {}
 
@@ -34,8 +34,9 @@ void main() {
 
   group('GetCategories', () {
     test('should get all categories from the repository', () async {
-      when(() => mockCategoryRepository.getAllCategories())
-          .thenAnswer((_) async => tCategories);
+      when(
+        () => mockCategoryRepository.getAllCategories(),
+      ).thenAnswer((_) async => tCategories);
 
       final result = await useCase.call();
 
@@ -45,8 +46,9 @@ void main() {
     });
 
     test('should return empty list when no categories exist', () async {
-      when(() => mockCategoryRepository.getAllCategories())
-          .thenAnswer((_) async => []);
+      when(
+        () => mockCategoryRepository.getAllCategories(),
+      ).thenAnswer((_) async => []);
 
       final result = await useCase.call();
 

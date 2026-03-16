@@ -1,15 +1,15 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:test_app/domain/entities/priority.dart';
-import 'package:test_app/domain/entities/task.dart';
-import 'package:test_app/domain/usecases/task/create_task.dart';
-import 'package:test_app/domain/usecases/task/delete_task.dart';
-import 'package:test_app/domain/usecases/task/get_subtasks.dart';
-import 'package:test_app/domain/usecases/task/get_tasks.dart';
-import 'package:test_app/domain/usecases/task/search_tasks.dart';
-import 'package:test_app/domain/usecases/task/toggle_task.dart';
-import 'package:test_app/domain/usecases/task/update_task.dart';
-import 'package:test_app/presentation/blocs/task/task_event.dart';
-import 'package:test_app/presentation/blocs/task/task_state.dart';
+import 'package:tasker/domain/entities/priority.dart';
+import 'package:tasker/domain/entities/task.dart';
+import 'package:tasker/domain/usecases/task/create_task.dart';
+import 'package:tasker/domain/usecases/task/delete_task.dart';
+import 'package:tasker/domain/usecases/task/get_subtasks.dart';
+import 'package:tasker/domain/usecases/task/get_tasks.dart';
+import 'package:tasker/domain/usecases/task/search_tasks.dart';
+import 'package:tasker/domain/usecases/task/toggle_task.dart';
+import 'package:tasker/domain/usecases/task/update_task.dart';
+import 'package:tasker/presentation/blocs/task/task_event.dart';
+import 'package:tasker/presentation/blocs/task/task_state.dart';
 
 class TaskBloc extends Bloc<TaskEvent, TaskState> {
   TaskBloc({
@@ -20,14 +20,14 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     required ToggleTask toggleTask,
     required SearchTasks searchTasks,
     required GetSubtasks getSubtasks,
-  })  : _getTasks = getTasks,
-        _createTask = createTask,
-        _updateTask = updateTask,
-        _deleteTask = deleteTask,
-        _toggleTask = toggleTask,
-        _searchTasks = searchTasks,
-        _getSubtasks = getSubtasks,
-        super(const TaskInitial()) {
+  }) : _getTasks = getTasks,
+       _createTask = createTask,
+       _updateTask = updateTask,
+       _deleteTask = deleteTask,
+       _toggleTask = toggleTask,
+       _searchTasks = searchTasks,
+       _getSubtasks = getSubtasks,
+       super(const TaskInitial()) {
     on<LoadTasks>(_onLoadTasks);
     on<CreateTaskEvent>(_onCreateTask);
     on<UpdateTaskEvent>(_onUpdateTask);
@@ -54,8 +54,9 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
       final allTasks = await _getTasks();
       // Keep all tasks (including subtasks) in allTasks for detail page lookups.
       // Only show top-level tasks in filteredTasks for the home list.
-      final topLevelTasks =
-          allTasks.where((t) => t.parentTaskId == null).toList();
+      final topLevelTasks = allTasks
+          .where((t) => t.parentTaskId == null)
+          .toList();
       final sorted = _applyDefaultSort(topLevelTasks);
       emit(TaskLoaded(allTasks: allTasks, filteredTasks: sorted));
     } catch (e) {
@@ -137,10 +138,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     );
   }
 
-  Future<void> _onSortTasks(
-    SortTasks event,
-    Emitter<TaskState> emit,
-  ) async {
+  Future<void> _onSortTasks(SortTasks event, Emitter<TaskState> emit) async {
     final currentState = state;
     if (currentState is! TaskLoaded) return;
 
@@ -207,8 +205,9 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
             cmp = a.dueDate!.compareTo(b.dueDate!);
           }
         case 'priority':
-          cmp = _priorityOrder(b.priority)
-              .compareTo(_priorityOrder(a.priority));
+          cmp = _priorityOrder(
+            b.priority,
+          ).compareTo(_priorityOrder(a.priority));
         case 'title':
           cmp = a.title.compareTo(b.title);
         case 'createdAt':

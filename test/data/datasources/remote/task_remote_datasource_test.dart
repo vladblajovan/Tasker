@@ -1,9 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:test_app/data/datasources/remote/task_remote_datasource.dart';
-import 'package:test_app/data/models/recurrence_model.dart';
-import 'package:test_app/data/models/task_model.dart';
-import 'package:test_app/domain/entities/priority.dart';
-import 'package:test_app/domain/entities/recurrence.dart';
+import 'package:tasker/data/datasources/remote/task_remote_datasource.dart';
+import 'package:tasker/data/models/recurrence_model.dart';
+import 'package:tasker/data/models/task_model.dart';
+import 'package:tasker/domain/entities/priority.dart';
+import 'package:tasker/domain/entities/recurrence.dart';
 
 void main() {
   final now = DateTime(2026, 1, 1);

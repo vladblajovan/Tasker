@@ -1,18 +1,18 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:test_app/domain/entities/priority.dart';
-import 'package:test_app/domain/entities/task.dart';
-import 'package:test_app/domain/usecases/task/create_task.dart';
-import 'package:test_app/domain/usecases/task/delete_task.dart';
-import 'package:test_app/domain/usecases/task/get_subtasks.dart';
-import 'package:test_app/domain/usecases/task/get_tasks.dart';
-import 'package:test_app/domain/usecases/task/search_tasks.dart';
-import 'package:test_app/domain/usecases/task/toggle_task.dart';
-import 'package:test_app/domain/usecases/task/update_task.dart';
-import 'package:test_app/presentation/blocs/task/task_bloc.dart';
-import 'package:test_app/presentation/blocs/task/task_event.dart';
-import 'package:test_app/presentation/blocs/task/task_state.dart';
+import 'package:tasker/domain/entities/priority.dart';
+import 'package:tasker/domain/entities/task.dart';
+import 'package:tasker/domain/usecases/task/create_task.dart';
+import 'package:tasker/domain/usecases/task/delete_task.dart';
+import 'package:tasker/domain/usecases/task/get_subtasks.dart';
+import 'package:tasker/domain/usecases/task/get_tasks.dart';
+import 'package:tasker/domain/usecases/task/search_tasks.dart';
+import 'package:tasker/domain/usecases/task/toggle_task.dart';
+import 'package:tasker/domain/usecases/task/update_task.dart';
+import 'package:tasker/presentation/blocs/task/task_bloc.dart';
+import 'package:tasker/presentation/blocs/task/task_event.dart';
+import 'package:tasker/presentation/blocs/task/task_state.dart';
 
 class MockGetTasks extends Mock implements GetTasks {}
 
@@ -67,14 +67,14 @@ void main() {
   );
 
   TaskBloc buildBloc() => TaskBloc(
-        getTasks: mockGetTasks,
-        createTask: mockCreateTask,
-        updateTask: mockUpdateTask,
-        deleteTask: mockDeleteTask,
-        toggleTask: mockToggleTask,
-        searchTasks: mockSearchTasks,
-        getSubtasks: mockGetSubtasks,
-      );
+    getTasks: mockGetTasks,
+    createTask: mockCreateTask,
+    updateTask: mockUpdateTask,
+    deleteTask: mockDeleteTask,
+    toggleTask: mockToggleTask,
+    searchTasks: mockSearchTasks,
+    getSubtasks: mockGetSubtasks,
+  );
 
   setUp(() {
     mockGetTasks = MockGetTasks();
@@ -96,19 +96,15 @@ void main() {
         'emits [TaskLoading, TaskLoaded] with all tasks in allTasks and top-level in filteredTasks',
         build: buildBloc,
         setUp: () {
-          when(() => mockGetTasks()).thenAnswer(
-            (_) async => [tTask, tTask2, tSubtask],
-          );
+          when(
+            () => mockGetTasks(),
+          ).thenAnswer((_) async => [tTask, tTask2, tSubtask]);
         },
         act: (bloc) => bloc.add(const LoadTasks()),
         expect: () => [
           const TaskLoading(),
           isA<TaskLoaded>()
-              .having(
-                (s) => s.allTasks.length,
-                'allTasks includes subtasks',
-                3,
-              )
+              .having((s) => s.allTasks.length, 'allTasks includes subtasks', 3)
               .having(
                 (s) => s.filteredTasks.length,
                 'filteredTasks excludes subtasks',
@@ -129,10 +125,7 @@ void main() {
           when(() => mockGetTasks()).thenThrow(Exception('DB error'));
         },
         act: (bloc) => bloc.add(const LoadTasks()),
-        expect: () => [
-          const TaskLoading(),
-          isA<TaskError>(),
-        ],
+        expect: () => [const TaskLoading(), isA<TaskError>()],
       );
 
       blocTest<TaskBloc, TaskState>(
@@ -140,9 +133,9 @@ void main() {
         build: buildBloc,
         setUp: () {
           final completedTask = tTask.copyWith(isCompleted: true);
-          when(() => mockGetTasks()).thenAnswer(
-            (_) async => [completedTask, tTask2],
-          );
+          when(
+            () => mockGetTasks(),
+          ).thenAnswer((_) async => [completedTask, tTask2]);
         },
         act: (bloc) => bloc.add(const LoadTasks()),
         expect: () => [
@@ -165,10 +158,7 @@ void main() {
           when(() => mockGetTasks()).thenAnswer((_) async => [tTask]);
         },
         act: (bloc) => bloc.add(CreateTaskEvent(tTask)),
-        expect: () => [
-          const TaskLoading(),
-          isA<TaskLoaded>(),
-        ],
+        expect: () => [const TaskLoading(), isA<TaskLoaded>()],
         verify: (_) {
           verify(() => mockCreateTask(tTask)).called(1);
         },
@@ -194,10 +184,7 @@ void main() {
           when(() => mockGetTasks()).thenAnswer((_) async => [tTask]);
         },
         act: (bloc) => bloc.add(UpdateTaskEvent(tTask)),
-        expect: () => [
-          const TaskLoading(),
-          isA<TaskLoaded>(),
-        ],
+        expect: () => [const TaskLoading(), isA<TaskLoaded>()],
         verify: (_) {
           verify(() => mockUpdateTask(tTask)).called(1);
         },
@@ -213,10 +200,7 @@ void main() {
           when(() => mockGetTasks()).thenAnswer((_) async => [tTask2]);
         },
         act: (bloc) => bloc.add(const DeleteTaskEvent('task-1')),
-        expect: () => [
-          const TaskLoading(),
-          isA<TaskLoaded>(),
-        ],
+        expect: () => [const TaskLoading(), isA<TaskLoaded>()],
         verify: (_) {
           verify(() => mockDeleteTask('task-1')).called(1);
         },
@@ -234,10 +218,7 @@ void main() {
           when(() => mockGetTasks()).thenAnswer((_) async => [tTask]);
         },
         act: (bloc) => bloc.add(const ToggleTaskEvent('task-1')),
-        expect: () => [
-          const TaskLoading(),
-          isA<TaskLoaded>(),
-        ],
+        expect: () => [const TaskLoading(), isA<TaskLoaded>()],
         verify: (_) {
           verify(() => mockToggleTask('task-1')).called(1);
         },
@@ -258,9 +239,7 @@ void main() {
             tTask2.copyWith(categoryId: 'cat-2'),
           ],
         ),
-        act: (bloc) => bloc.add(
-          const FilterTasks(categoryId: 'cat-1'),
-        ),
+        act: (bloc) => bloc.add(const FilterTasks(categoryId: 'cat-1')),
         expect: () => [
           isA<TaskLoaded>()
               .having((s) => s.filteredTasks.length, 'filteredTasks length', 1)
@@ -284,9 +263,7 @@ void main() {
           allTasks: [tTask, tTask2],
           filteredTasks: [tTask, tTask2],
         ),
-        act: (bloc) => bloc.add(
-          const FilterTasks(priority: Priority.high),
-        ),
+        act: (bloc) => bloc.add(const FilterTasks(priority: Priority.high)),
         expect: () => [
           isA<TaskLoaded>().having(
             (s) => s.filteredTasks.length,
@@ -309,9 +286,7 @@ void main() {
             tTask2.copyWith(tags: ['tag-2']),
           ],
         ),
-        act: (bloc) => bloc.add(
-          const FilterTasks(tagIds: ['tag-1']),
-        ),
+        act: (bloc) => bloc.add(const FilterTasks(tagIds: ['tag-1'])),
         expect: () => [
           isA<TaskLoaded>().having(
             (s) => s.filteredTasks.length,
@@ -335,7 +310,10 @@ void main() {
         build: buildBloc,
         seed: () => TaskLoaded(
           allTasks: [tTask, tTask2],
-          filteredTasks: [tTask, tTask2], // [Test Task, Another Task] — unsorted
+          filteredTasks: [
+            tTask,
+            tTask2,
+          ], // [Test Task, Another Task] — unsorted
         ),
         act: (bloc) => bloc.add(const SortTasks('title', true)),
         expect: () => [
@@ -359,10 +337,8 @@ void main() {
       blocTest<TaskBloc, TaskState>(
         'does nothing when state is already TaskLoaded (subtasks in allTasks)',
         build: buildBloc,
-        seed: () => TaskLoaded(
-          allTasks: [tTask, tSubtask],
-          filteredTasks: [tTask],
-        ),
+        seed: () =>
+            TaskLoaded(allTasks: [tTask, tSubtask], filteredTasks: [tTask]),
         act: (bloc) => bloc.add(const LoadSubtasks('task-1')),
         expect: () => [],
       );
@@ -371,15 +347,10 @@ void main() {
         'dispatches LoadTasks when state is not TaskLoaded',
         build: buildBloc,
         setUp: () {
-          when(() => mockGetTasks()).thenAnswer(
-            (_) async => [tTask, tSubtask],
-          );
+          when(() => mockGetTasks()).thenAnswer((_) async => [tTask, tSubtask]);
         },
         act: (bloc) => bloc.add(const LoadSubtasks('task-1')),
-        expect: () => [
-          const TaskLoading(),
-          isA<TaskLoaded>(),
-        ],
+        expect: () => [const TaskLoading(), isA<TaskLoaded>()],
       );
     });
   });

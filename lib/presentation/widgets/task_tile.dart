@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
-import 'package:test_app/domain/entities/task.dart';
-import 'package:test_app/presentation/blocs/category/category_bloc.dart';
-import 'package:test_app/presentation/blocs/category/category_state.dart';
-import 'package:test_app/presentation/blocs/tag/tag_bloc.dart';
-import 'package:test_app/presentation/blocs/tag/tag_state.dart';
-import 'package:test_app/presentation/blocs/task/task_bloc.dart';
-import 'package:test_app/presentation/blocs/task/task_event.dart';
-import 'package:test_app/presentation/widgets/category_chip.dart';
-import 'package:test_app/presentation/widgets/priority_badge.dart';
-import 'package:test_app/presentation/widgets/tag_chip.dart';
+import 'package:tasker/domain/entities/task.dart';
+import 'package:tasker/presentation/blocs/category/category_bloc.dart';
+import 'package:tasker/presentation/blocs/category/category_state.dart';
+import 'package:tasker/presentation/blocs/tag/tag_bloc.dart';
+import 'package:tasker/presentation/blocs/tag/tag_state.dart';
+import 'package:tasker/presentation/blocs/task/task_bloc.dart';
+import 'package:tasker/presentation/blocs/task/task_event.dart';
+import 'package:tasker/presentation/widgets/category_chip.dart';
+import 'package:tasker/presentation/widgets/priority_badge.dart';
+import 'package:tasker/presentation/widgets/tag_chip.dart';
 
 class TaskTile extends StatelessWidget {
   const TaskTile({
@@ -54,8 +54,7 @@ class TaskTile extends StatelessWidget {
         title: Text(
           task.title,
           style: TextStyle(
-            decoration:
-                task.isCompleted ? TextDecoration.lineThrough : null,
+            decoration: task.isCompleted ? TextDecoration.lineThrough : null,
             color: task.isCompleted ? Colors.grey : null,
           ),
         ),
@@ -122,10 +121,6 @@ class TaskTile extends StatelessWidget {
 
     if (parts.isEmpty) return null;
 
-    return Wrap(
-      spacing: 4,
-      runSpacing: 4,
-      children: parts,
-    );
+    return Wrap(spacing: 4, runSpacing: 4, children: parts);
   }
 }

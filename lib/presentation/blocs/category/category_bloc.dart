@@ -1,10 +1,10 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:test_app/domain/usecases/category/create_category.dart';
-import 'package:test_app/domain/usecases/category/delete_category.dart';
-import 'package:test_app/domain/usecases/category/get_categories.dart';
-import 'package:test_app/domain/usecases/category/update_category.dart';
-import 'package:test_app/presentation/blocs/category/category_event.dart';
-import 'package:test_app/presentation/blocs/category/category_state.dart';
+import 'package:tasker/domain/usecases/category/create_category.dart';
+import 'package:tasker/domain/usecases/category/delete_category.dart';
+import 'package:tasker/domain/usecases/category/get_categories.dart';
+import 'package:tasker/domain/usecases/category/update_category.dart';
+import 'package:tasker/presentation/blocs/category/category_event.dart';
+import 'package:tasker/presentation/blocs/category/category_state.dart';
 
 class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
   CategoryBloc({
@@ -12,11 +12,11 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
     required CreateCategory createCategory,
     required UpdateCategory updateCategory,
     required DeleteCategory deleteCategory,
-  })  : _getCategories = getCategories,
-        _createCategory = createCategory,
-        _updateCategory = updateCategory,
-        _deleteCategory = deleteCategory,
-        super(const CategoryInitial()) {
+  }) : _getCategories = getCategories,
+       _createCategory = createCategory,
+       _updateCategory = updateCategory,
+       _deleteCategory = deleteCategory,
+       super(const CategoryInitial()) {
     on<LoadCategories>(_onLoadCategories);
     on<CreateCategoryEvent>(_onCreateCategory);
     on<UpdateCategoryEvent>(_onUpdateCategory);
@@ -36,7 +36,8 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
     emit(const CategoryLoading());
     try {
       final categories = await _getCategories();
-      final sorted = List.of(categories)..sort((a, b) => a.order.compareTo(b.order));
+      final sorted = List.of(categories)
+        ..sort((a, b) => a.order.compareTo(b.order));
       emit(CategoryLoaded(sorted));
     } catch (e) {
       emit(CategoryError(e.toString()));
@@ -87,9 +88,7 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
     if (currentState is! CategoryLoaded) return;
 
     try {
-      final categoriesById = {
-        for (final c in currentState.categories) c.id: c,
-      };
+      final categoriesById = {for (final c in currentState.categories) c.id: c};
 
       for (var i = 0; i < event.orderedIds.length; i++) {
         final id = event.orderedIds[i];

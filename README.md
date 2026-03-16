@@ -1,6 +1,6 @@
-# test_app
+# Tasker
 
-A new Flutter project.
+A task management application built with Flutter.
 
 ## Getting Started
 

@@ -1,9 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:test_app/data/datasources/tag_local_datasource.dart';
-import 'package:test_app/data/models/tag_model.dart';
-import 'package:test_app/data/repositories/tag_repository_impl.dart';
-import 'package:test_app/domain/entities/tag.dart';
+import 'package:tasker/data/datasources/tag_local_datasource.dart';
+import 'package:tasker/data/models/tag_model.dart';
+import 'package:tasker/data/repositories/tag_repository_impl.dart';
+import 'package:tasker/domain/entities/tag.dart';
 
 class MockTagLocalDatasource extends Mock implements TagLocalDatasource {}
 
@@ -36,8 +36,9 @@ void main() {
 
   group('getAllTags', () {
     test('should return list of tags from datasource', () async {
-      when(() => mockDatasource.getAllTags())
-          .thenAnswer((_) async => [tTagModel]);
+      when(
+        () => mockDatasource.getAllTags(),
+      ).thenAnswer((_) async => [tTagModel]);
 
       final result = await repository.getAllTags();
 
@@ -50,8 +51,9 @@ void main() {
 
   group('getTagById', () {
     test('should return tag when found', () async {
-      when(() => mockDatasource.getTagById('tag-1'))
-          .thenAnswer((_) async => tTagModel);
+      when(
+        () => mockDatasource.getTagById('tag-1'),
+      ).thenAnswer((_) async => tTagModel);
 
       final result = await repository.getTagById('tag-1');
 
@@ -61,8 +63,9 @@ void main() {
     });
 
     test('should return null when not found', () async {
-      when(() => mockDatasource.getTagById('tag-1'))
-          .thenAnswer((_) async => null);
+      when(
+        () => mockDatasource.getTagById('tag-1'),
+      ).thenAnswer((_) async => null);
 
       final result = await repository.getTagById('tag-1');
 
@@ -71,10 +74,8 @@ void main() {
   });
 
   group('createTag', () {
-    test('should create tag via datasource using fromEntity mapping',
-        () async {
-      when(() => mockDatasource.createTag(any()))
-          .thenAnswer((_) async {});
+    test('should create tag via datasource using fromEntity mapping', () async {
+      when(() => mockDatasource.createTag(any())).thenAnswer((_) async {});
 
       await repository.createTag(tTag);
 
@@ -88,10 +89,8 @@ void main() {
   });
 
   group('updateTag', () {
-    test('should update tag via datasource using fromEntity mapping',
-        () async {
-      when(() => mockDatasource.updateTag(any()))
-          .thenAnswer((_) async {});
+    test('should update tag via datasource using fromEntity mapping', () async {
+      when(() => mockDatasource.updateTag(any())).thenAnswer((_) async {});
 
       await repository.updateTag(tTag);
 
@@ -106,8 +105,7 @@ void main() {
 
   group('deleteTag', () {
     test('should delete tag via datasource', () async {
-      when(() => mockDatasource.deleteTag('tag-1'))
-          .thenAnswer((_) async {});
+      when(() => mockDatasource.deleteTag('tag-1')).thenAnswer((_) async {});
 
       await repository.deleteTag('tag-1');
 

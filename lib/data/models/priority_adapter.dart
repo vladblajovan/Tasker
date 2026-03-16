@@ -1,5 +1,5 @@
 import 'package:hive_ce/hive.dart';
-import 'package:test_app/domain/entities/priority.dart';
+import 'package:tasker/domain/entities/priority.dart';
 
 class PriorityAdapter extends TypeAdapter<Priority> {
   @override

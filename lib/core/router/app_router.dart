@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:test_app/presentation/pages/category/category_management_page.dart';
-import 'package:test_app/presentation/pages/home/home_page.dart';
-import 'package:test_app/presentation/pages/search/search_page.dart';
-import 'package:test_app/presentation/pages/tag/tag_management_page.dart';
-import 'package:test_app/presentation/pages/task_detail/task_detail_page.dart';
-import 'package:test_app/presentation/pages/task_form/task_form_page.dart';
+import 'package:tasker/presentation/pages/category/category_management_page.dart';
+import 'package:tasker/presentation/pages/home/home_page.dart';
+import 'package:tasker/presentation/pages/search/search_page.dart';
+import 'package:tasker/presentation/pages/tag/tag_management_page.dart';
+import 'package:tasker/presentation/pages/task_detail/task_detail_page.dart';
+import 'package:tasker/presentation/pages/task_form/task_form_page.dart';
 
 class AppRouter {
   AppRouter._();

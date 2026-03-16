@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:test_app/domain/entities/priority.dart';
-import 'package:test_app/domain/entities/recurrence.dart';
+import 'package:tasker/domain/entities/priority.dart';
+import 'package:tasker/domain/entities/recurrence.dart';
 
 part 'task.freezed.dart';
 

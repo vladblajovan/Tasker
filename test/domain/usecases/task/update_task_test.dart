@@ -1,10 +1,10 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:test_app/core/error/failures.dart';
-import 'package:test_app/domain/entities/priority.dart';
-import 'package:test_app/domain/entities/task.dart';
-import 'package:test_app/domain/repositories/task_repository.dart';
-import 'package:test_app/domain/usecases/task/update_task.dart';
+import 'package:tasker/core/error/failures.dart';
+import 'package:tasker/domain/entities/priority.dart';
+import 'package:tasker/domain/entities/task.dart';
+import 'package:tasker/domain/repositories/task_repository.dart';
+import 'package:tasker/domain/usecases/task/update_task.dart';
 
 class MockTaskRepository extends Mock implements TaskRepository {}
 
@@ -27,8 +27,7 @@ void main() {
 
   group('UpdateTask', () {
     test('should update a task via the repository', () async {
-      when(() => mockTaskRepository.updateTask(tTask))
-          .thenAnswer((_) async {});
+      when(() => mockTaskRepository.updateTask(tTask)).thenAnswer((_) async {});
 
       await useCase.call(tTask);
 
@@ -47,16 +46,18 @@ void main() {
       verifyZeroInteractions(mockTaskRepository);
     });
 
-    test('should throw ValidationFailure when title is only whitespace',
-        () async {
-      final invalidTask = tTask.copyWith(title: '   ');
+    test(
+      'should throw ValidationFailure when title is only whitespace',
+      () async {
+        final invalidTask = tTask.copyWith(title: '   ');
 
-      expect(
-        () => useCase.call(invalidTask),
-        throwsA(isA<ValidationFailure>()),
-      );
+        expect(
+          () => useCase.call(invalidTask),
+          throwsA(isA<ValidationFailure>()),
+        );
 
-      verifyZeroInteractions(mockTaskRepository);
-    });
+        verifyZeroInteractions(mockTaskRepository);
+      },
+    );
   });
 }

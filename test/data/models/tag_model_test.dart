@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:test_app/data/models/tag_model.dart';
-import 'package:test_app/domain/entities/tag.dart';
+import 'package:tasker/data/models/tag_model.dart';
+import 'package:tasker/domain/entities/tag.dart';
 
 void main() {
   group('TagModel', () {

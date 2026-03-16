@@ -1,5 +1,5 @@
-import 'package:test_app/domain/entities/task.dart';
-import 'package:test_app/domain/repositories/notification_repository.dart';
+import 'package:tasker/domain/entities/task.dart';
+import 'package:tasker/domain/repositories/notification_repository.dart';
 
 class ScheduleNotification {
   ScheduleNotification(this._notificationRepository);

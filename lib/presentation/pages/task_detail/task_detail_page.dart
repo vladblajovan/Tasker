@@ -2,21 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
-import 'package:test_app/domain/entities/category.dart';
-import 'package:test_app/domain/entities/recurrence.dart';
-import 'package:test_app/domain/entities/tag.dart';
-import 'package:test_app/domain/entities/task.dart';
-import 'package:test_app/presentation/blocs/category/category_bloc.dart';
-import 'package:test_app/presentation/blocs/category/category_state.dart';
-import 'package:test_app/presentation/blocs/tag/tag_bloc.dart';
-import 'package:test_app/presentation/blocs/tag/tag_state.dart';
-import 'package:test_app/presentation/blocs/task/task_bloc.dart';
-import 'package:test_app/presentation/blocs/task/task_event.dart';
-import 'package:test_app/presentation/blocs/task/task_state.dart';
-import 'package:test_app/presentation/widgets/category_chip.dart';
-import 'package:test_app/presentation/widgets/priority_badge.dart';
-import 'package:test_app/presentation/widgets/tag_chip.dart';
-import 'package:test_app/presentation/widgets/task_tile.dart';
+import 'package:tasker/domain/entities/category.dart';
+import 'package:tasker/domain/entities/recurrence.dart';
+import 'package:tasker/domain/entities/tag.dart';
+import 'package:tasker/domain/entities/task.dart';
+import 'package:tasker/presentation/blocs/category/category_bloc.dart';
+import 'package:tasker/presentation/blocs/category/category_state.dart';
+import 'package:tasker/presentation/blocs/tag/tag_bloc.dart';
+import 'package:tasker/presentation/blocs/tag/tag_state.dart';
+import 'package:tasker/presentation/blocs/task/task_bloc.dart';
+import 'package:tasker/presentation/blocs/task/task_event.dart';
+import 'package:tasker/presentation/blocs/task/task_state.dart';
+import 'package:tasker/presentation/widgets/category_chip.dart';
+import 'package:tasker/presentation/widgets/priority_badge.dart';
+import 'package:tasker/presentation/widgets/tag_chip.dart';
+import 'package:tasker/presentation/widgets/task_tile.dart';
 
 class TaskDetailPage extends StatefulWidget {
   const TaskDetailPage({super.key, required this.taskId});
@@ -93,7 +93,9 @@ class _TaskDetailPageState extends State<TaskDetailPage> {
     List<Category> categories,
     List<Tag> tags,
   ) {
-    final category = categories.where((c) => c.id == task.categoryId).firstOrNull;
+    final category = categories
+        .where((c) => c.id == task.categoryId)
+        .firstOrNull;
     final taskTags = tags.where((t) => task.tags.contains(t.id)).toList();
 
     return ListView(
@@ -107,11 +109,11 @@ class _TaskDetailPageState extends State<TaskDetailPage> {
               child: Text(
                 task.title,
                 style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                      decoration: task.isCompleted
-                          ? TextDecoration.lineThrough
-                          : null,
-                      color: task.isCompleted ? Colors.grey : null,
-                    ),
+                  decoration: task.isCompleted
+                      ? TextDecoration.lineThrough
+                      : null,
+                  color: task.isCompleted ? Colors.grey : null,
+                ),
               ),
             ),
             if (task.priority.name != 'none') ...[
@@ -171,7 +173,8 @@ class _TaskDetailPageState extends State<TaskDetailPage> {
               Text(
                 'Due: ${DateFormat.yMMMd().format(task.dueDate!)}',
                 style: TextStyle(
-                  color: task.dueDate!.isBefore(DateTime.now()) &&
+                  color:
+                      task.dueDate!.isBefore(DateTime.now()) &&
                           !task.isCompleted
                       ? Colors.red
                       : Colors.grey[600],
@@ -199,7 +202,8 @@ class _TaskDetailPageState extends State<TaskDetailPage> {
               style: Theme.of(context).textTheme.titleMedium,
             ),
             TextButton.icon(
-              onPressed: () => context.push('/task/${widget.taskId}/subtask/new'),
+              onPressed: () =>
+                  context.push('/task/${widget.taskId}/subtask/new'),
               icon: const Icon(Icons.add, size: 18),
               label: const Text('Add'),
             ),
@@ -273,8 +277,9 @@ class _TaskDetailPageState extends State<TaskDetailPage> {
         final resolvedTask = task;
         return BlocBuilder<CategoryBloc, CategoryState>(
           builder: (context, categoryState) {
-            final categories =
-                categoryState is CategoryLoaded ? categoryState.categories : <Category>[];
+            final categories = categoryState is CategoryLoaded
+                ? categoryState.categories
+                : <Category>[];
 
             return BlocBuilder<TagBloc, TagState>(
               builder: (context, tagState) {
@@ -301,9 +306,9 @@ class _TaskDetailPageState extends State<TaskDetailPage> {
                             ? 'Mark incomplete'
                             : 'Mark complete',
                         onPressed: () {
-                          context
-                              .read<TaskBloc>()
-                              .add(ToggleTaskEvent(widget.taskId));
+                          context.read<TaskBloc>().add(
+                            ToggleTaskEvent(widget.taskId),
+                          );
                           context.read<TaskBloc>().add(const LoadTasks());
                         },
                       ),

@@ -1,4 +1,4 @@
-import 'package:test_app/domain/entities/category.dart';
+import 'package:tasker/domain/entities/category.dart';
 
 abstract class CategoryRepository {
   Future<List<Category>> getAllCategories();

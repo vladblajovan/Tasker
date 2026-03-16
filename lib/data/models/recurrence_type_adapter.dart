@@ -1,5 +1,5 @@
 import 'package:hive_ce/hive.dart';
-import 'package:test_app/domain/entities/recurrence.dart';
+import 'package:tasker/domain/entities/recurrence.dart';
 
 class RecurrenceTypeAdapter extends TypeAdapter<RecurrenceType> {
   @override

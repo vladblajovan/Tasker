@@ -1,9 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:test_app/domain/entities/priority.dart';
-import 'package:test_app/domain/entities/task.dart';
-import 'package:test_app/domain/repositories/task_repository.dart';
-import 'package:test_app/domain/usecases/task/get_tasks.dart';
+import 'package:tasker/domain/entities/priority.dart';
+import 'package:tasker/domain/entities/task.dart';
+import 'package:tasker/domain/repositories/task_repository.dart';
+import 'package:tasker/domain/usecases/task/get_tasks.dart';
 
 class MockTaskRepository extends Mock implements TaskRepository {}
 
@@ -35,8 +35,9 @@ void main() {
 
   group('GetTasks', () {
     test('should get all top-level tasks from the repository', () async {
-      when(() => mockTaskRepository.getAllTasks())
-          .thenAnswer((_) async => tTasks);
+      when(
+        () => mockTaskRepository.getAllTasks(),
+      ).thenAnswer((_) async => tTasks);
 
       final result = await useCase.call();
 
@@ -46,8 +47,7 @@ void main() {
     });
 
     test('should return empty list when no tasks exist', () async {
-      when(() => mockTaskRepository.getAllTasks())
-          .thenAnswer((_) async => []);
+      when(() => mockTaskRepository.getAllTasks()).thenAnswer((_) async => []);
 
       final result = await useCase.call();
 

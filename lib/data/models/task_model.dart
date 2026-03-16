@@ -1,7 +1,7 @@
 import 'package:hive_ce/hive.dart';
-import 'package:test_app/data/models/recurrence_model.dart';
-import 'package:test_app/domain/entities/priority.dart';
-import 'package:test_app/domain/entities/task.dart';
+import 'package:tasker/data/models/recurrence_model.dart';
+import 'package:tasker/domain/entities/priority.dart';
+import 'package:tasker/domain/entities/task.dart';
 
 part 'task_model.g.dart';
 

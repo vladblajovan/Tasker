@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:test_app/domain/entities/tag.dart';
-import 'package:test_app/presentation/blocs/tag/tag_bloc.dart';
-import 'package:test_app/presentation/blocs/tag/tag_event.dart';
-import 'package:test_app/presentation/blocs/tag/tag_state.dart';
+import 'package:tasker/domain/entities/tag.dart';
+import 'package:tasker/presentation/blocs/tag/tag_bloc.dart';
+import 'package:tasker/presentation/blocs/tag/tag_event.dart';
+import 'package:tasker/presentation/blocs/tag/tag_state.dart';
 import 'package:uuid/uuid.dart';
 
 class TagManagementPage extends StatelessWidget {
@@ -141,10 +141,7 @@ class _TagTile extends StatelessWidget {
 }
 
 class _TagDialog extends StatefulWidget {
-  const _TagDialog({
-    this.initialName = '',
-    required this.onSave,
-  });
+  const _TagDialog({this.initialName = '', required this.onSave});
 
   final String initialName;
   final void Function(String name) onSave;
@@ -171,8 +168,7 @@ class _TagDialogState extends State<_TagDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title:
-          Text(widget.initialName.isEmpty ? 'Add Tag' : 'Edit Tag'),
+      title: Text(widget.initialName.isEmpty ? 'Add Tag' : 'Edit Tag'),
       content: TextField(
         controller: _nameController,
         autofocus: true,

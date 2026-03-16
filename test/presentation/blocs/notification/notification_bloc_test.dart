@@ -1,12 +1,12 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:test_app/domain/entities/task.dart';
-import 'package:test_app/domain/usecases/notification/cancel_notification.dart';
-import 'package:test_app/domain/usecases/notification/schedule_notification.dart';
-import 'package:test_app/presentation/blocs/notification/notification_bloc.dart';
-import 'package:test_app/presentation/blocs/notification/notification_event.dart';
-import 'package:test_app/presentation/blocs/notification/notification_state.dart';
+import 'package:tasker/domain/entities/task.dart';
+import 'package:tasker/domain/usecases/notification/cancel_notification.dart';
+import 'package:tasker/domain/usecases/notification/schedule_notification.dart';
+import 'package:tasker/presentation/blocs/notification/notification_bloc.dart';
+import 'package:tasker/presentation/blocs/notification/notification_event.dart';
+import 'package:tasker/presentation/blocs/notification/notification_state.dart';
 
 class MockScheduleNotification extends Mock implements ScheduleNotification {}
 
@@ -34,9 +34,9 @@ void main() {
   );
 
   NotificationBloc buildBloc() => NotificationBloc(
-        scheduleNotification: mockScheduleNotification,
-        cancelNotification: mockCancelNotification,
-      );
+    scheduleNotification: mockScheduleNotification,
+    cancelNotification: mockCancelNotification,
+  );
 
   setUp(() {
     mockScheduleNotification = MockScheduleNotification();
@@ -66,8 +66,9 @@ void main() {
         'emits NotificationError when scheduleNotification throws',
         build: buildBloc,
         setUp: () {
-          when(() => mockScheduleNotification(any()))
-              .thenThrow(Exception('permission denied'));
+          when(
+            () => mockScheduleNotification(any()),
+          ).thenThrow(Exception('permission denied'));
         },
         act: (bloc) => bloc.add(ScheduleNotificationEvent(tTask)),
         expect: () => [isA<NotificationError>()],
@@ -79,8 +80,7 @@ void main() {
         'emits NotificationReady after cancelling',
         build: buildBloc,
         setUp: () {
-          when(() => mockCancelNotification('task-1'))
-              .thenAnswer((_) async {});
+          when(() => mockCancelNotification('task-1')).thenAnswer((_) async {});
         },
         act: (bloc) => bloc.add(const CancelNotificationEvent('task-1')),
         expect: () => [const NotificationReady()],
@@ -93,8 +93,9 @@ void main() {
         'emits NotificationError when cancelNotification throws',
         build: buildBloc,
         setUp: () {
-          when(() => mockCancelNotification('task-1'))
-              .thenThrow(Exception('error'));
+          when(
+            () => mockCancelNotification('task-1'),
+          ).thenThrow(Exception('error'));
         },
         act: (bloc) => bloc.add(const CancelNotificationEvent('task-1')),
         expect: () => [isA<NotificationError>()],
@@ -121,8 +122,11 @@ void main() {
         seed: () => const NotificationReady(),
         act: (bloc) => bloc.add(const HandleNotificationTap('task-99')),
         expect: () => [
-          isA<NotificationNavigate>()
-              .having((s) => s.taskId, 'taskId', 'task-99'),
+          isA<NotificationNavigate>().having(
+            (s) => s.taskId,
+            'taskId',
+            'task-99',
+          ),
         ],
       );
     });

@@ -1,5 +1,5 @@
-import 'package:test_app/domain/repositories/tag_repository.dart';
-import 'package:test_app/domain/repositories/task_repository.dart';
+import 'package:tasker/domain/repositories/tag_repository.dart';
+import 'package:tasker/domain/repositories/task_repository.dart';
 
 class DeleteTag {
   DeleteTag(this._tagRepository, this._taskRepository);

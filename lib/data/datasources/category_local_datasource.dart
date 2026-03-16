@@ -1,5 +1,5 @@
 import 'package:hive_ce/hive.dart';
-import 'package:test_app/data/models/category_model.dart';
+import 'package:tasker/data/models/category_model.dart';
 
 abstract class CategoryLocalDatasource {
   Future<List<CategoryModel>> getAllCategories();

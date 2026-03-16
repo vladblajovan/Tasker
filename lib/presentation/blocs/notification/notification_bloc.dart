@@ -1,16 +1,16 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:test_app/domain/usecases/notification/cancel_notification.dart';
-import 'package:test_app/domain/usecases/notification/schedule_notification.dart';
-import 'package:test_app/presentation/blocs/notification/notification_event.dart';
-import 'package:test_app/presentation/blocs/notification/notification_state.dart';
+import 'package:tasker/domain/usecases/notification/cancel_notification.dart';
+import 'package:tasker/domain/usecases/notification/schedule_notification.dart';
+import 'package:tasker/presentation/blocs/notification/notification_event.dart';
+import 'package:tasker/presentation/blocs/notification/notification_state.dart';
 
 class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
   NotificationBloc({
     required ScheduleNotification scheduleNotification,
     required CancelNotification cancelNotification,
-  })  : _scheduleNotification = scheduleNotification,
-        _cancelNotification = cancelNotification,
-        super(const NotificationInitial()) {
+  }) : _scheduleNotification = scheduleNotification,
+       _cancelNotification = cancelNotification,
+       super(const NotificationInitial()) {
     on<ScheduleNotificationEvent>(_onScheduleNotification);
     on<CancelNotificationEvent>(_onCancelNotification);
     on<HandleNotificationTap>(_onHandleNotificationTap);
