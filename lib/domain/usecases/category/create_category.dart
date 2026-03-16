@@ -1,0 +1,17 @@
+import 'package:test_app/core/error/failures.dart';
+import 'package:test_app/domain/entities/category.dart';
+import 'package:test_app/domain/repositories/category_repository.dart';
+
+class CreateCategory {
+  CreateCategory(this._categoryRepository);
+
+  final CategoryRepository _categoryRepository;
+
+  Future<void> call(Category category) async {
+    if (category.name.trim().isEmpty) {
+      throw const ValidationFailure('Category name cannot be empty');
+    }
+
+    await _categoryRepository.createCategory(category);
+  }
+}
