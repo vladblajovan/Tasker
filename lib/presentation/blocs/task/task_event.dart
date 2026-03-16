@@ -78,3 +78,13 @@ class LoadSubtasks extends TaskEvent {
   @override
   List<Object?> get props => [parentTaskId];
 }
+
+class ReorderTasksEvent extends TaskEvent {
+  const ReorderTasksEvent(this.oldIndex, this.newIndex);
+
+  final int oldIndex;
+  final int newIndex;
+
+  @override
+  List<Object?> get props => [oldIndex, newIndex];
+}

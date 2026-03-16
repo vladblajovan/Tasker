@@ -20,5 +20,6 @@ abstract class Task with _$Task {
     String? parentTaskId,
     Recurrence? recurrence,
     DateTime? completedAt,
+    @Default(0) int orderIndex,
   }) = _Task;
 }

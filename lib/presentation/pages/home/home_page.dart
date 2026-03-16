@@ -12,6 +12,7 @@ import 'package:tasker/presentation/blocs/tag/tag_state.dart';
 import 'package:tasker/presentation/blocs/task/task_bloc.dart';
 import 'package:tasker/presentation/blocs/task/task_event.dart';
 import 'package:tasker/presentation/blocs/task/task_state.dart';
+import 'package:tasker/presentation/blocs/theme/theme_cubit.dart';
 import 'package:tasker/presentation/pages/category/category_management_page.dart';
 import 'package:tasker/presentation/pages/tag/tag_management_page.dart';
 import 'package:tasker/presentation/widgets/filter_bar.dart';
@@ -67,14 +68,20 @@ class _HomePageState extends State<HomePage> {
                     subtitle: 'Tap + to create your first task',
                   );
                 }
-                return ListView.builder(
+                return ReorderableListView.builder(
                   itemCount: topLevelTasks.length,
+                  onReorder: (oldIndex, newIndex) {
+                    context.read<TaskBloc>().add(
+                      ReorderTasksEvent(oldIndex, newIndex),
+                    );
+                  },
                   itemBuilder: (context, index) {
                     final task = topLevelTasks[index];
                     final subtaskCount = state.allTasks
                         .where((t) => t.parentTaskId == task.id)
                         .length;
                     return TaskTile(
+                      key: ValueKey('task-${task.id}'),
                       task: task,
                       subtaskCount: subtaskCount,
                       onTap: () => context.push('/task/${task.id}'),
@@ -129,11 +136,31 @@ class _HomePageState extends State<HomePage> {
         appBar: AppBar(
           title: Text(_appBarTitle),
           actions: [
-            if (_currentIndex == 0)
+            BlocBuilder<ThemeCubit, ThemeMode>(
+              builder: (context, themeMode) {
+                final isDark =
+                    themeMode == ThemeMode.dark ||
+                    (themeMode == ThemeMode.system &&
+                        MediaQuery.platformBrightnessOf(context) ==
+                            Brightness.dark);
+                return IconButton(
+                  icon: Icon(isDark ? Icons.light_mode : Icons.dark_mode),
+                  tooltip: 'Toggle Theme',
+                  onPressed: () => context.read<ThemeCubit>().toggleTheme(),
+                );
+              },
+            ),
+            if (_currentIndex == 0) ...[
+              IconButton(
+                icon: const Icon(Icons.pie_chart),
+                tooltip: 'Dashboard',
+                onPressed: () => context.push('/dashboard'),
+              ),
               IconButton(
                 icon: const Icon(Icons.search),
                 onPressed: () => context.push('/search'),
               ),
+            ],
             if (_currentIndex == 1)
               IconButton(
                 icon: const Icon(Icons.add),

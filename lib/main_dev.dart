@@ -10,6 +10,6 @@ void main() async {
   AppConfig.instance = const AppConfig(flavor: Flavor.dev);
   await initHive();
   tz.initializeTimeZones();
-  setupDevDependencies();
+  await setupDevDependencies();
   runApp(const TodoApp());
 }

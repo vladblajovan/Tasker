@@ -18,6 +18,6 @@ void main() async {
   await initHive();
   tz.initializeTimeZones();
   await Supabase.initialize(url: supabaseUrl, anonKey: supabaseAnonKey);
-  setupProdDependencies();
+  await setupProdDependencies();
   runApp(const TodoApp());
 }

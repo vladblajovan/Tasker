@@ -21,6 +21,7 @@ class TaskModel extends HiveObject {
     this.parentTaskId,
     this.recurrence,
     this.completedAt,
+    this.orderIndex = 0,
   });
 
   @HiveField(0)
@@ -62,6 +63,9 @@ class TaskModel extends HiveObject {
   @HiveField(12)
   final DateTime? completedAt;
 
+  @HiveField(13)
+  final int orderIndex;
+
   Task toEntity() {
     return Task(
       id: id,
@@ -77,6 +81,7 @@ class TaskModel extends HiveObject {
       parentTaskId: parentTaskId,
       recurrence: recurrence?.toEntity(),
       completedAt: completedAt,
+      orderIndex: orderIndex,
     );
   }
 
@@ -97,6 +102,7 @@ class TaskModel extends HiveObject {
           ? RecurrenceModel.fromEntity(entity.recurrence!)
           : null,
       completedAt: entity.completedAt,
+      orderIndex: entity.orderIndex,
     );
   }
 }

@@ -36,6 +36,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     on<FilterTasks>(_onFilterTasks);
     on<SortTasks>(_onSortTasks);
     on<LoadSubtasks>(_onLoadSubtasks);
+    on<ReorderTasksEvent>(_onReorderTasks);
   }
 
   final GetTasks _getTasks;
@@ -166,6 +167,54 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     add(const LoadTasks());
   }
 
+  Future<void> _onReorderTasks(
+    ReorderTasksEvent event,
+    Emitter<TaskState> emit,
+  ) async {
+    final currentState = state;
+    if (currentState is! TaskLoaded) return;
+
+    // We only reorder the currently visible (filtered) top-level tasks.
+    final visibleTasks = List<Task>.from(currentState.filteredTasks);
+    
+    final int oldIndex = event.oldIndex;
+    int newIndex = event.newIndex;
+    if (oldIndex < newIndex) {
+      newIndex -= 1;
+    }
+
+    final Task item = visibleTasks.removeAt(oldIndex);
+    visibleTasks.insert(newIndex, item);
+
+    // Update orderIndex for all visible tasks to ensure consistency
+    final updatedTasks = <Task>[];
+    for (int i = 0; i < visibleTasks.length; i++) {
+      final updatedTask = visibleTasks[i].copyWith(orderIndex: i);
+      updatedTasks.add(updatedTask);
+      
+      // We shouldn't await in a loop normally, but since we are doing local DB writes, it's fast.
+      // Or we can just call _updateTask for the ones that actually changed.
+      // For simplicity and to decouple UI from DB slightly, we save all.
+      if (visibleTasks[i].orderIndex != i) {
+        await _updateTask(updatedTask);
+      }
+    }
+
+    // Replace the affected tasks in allTasks
+    final newAllTasks = List<Task>.from(currentState.allTasks);
+    for (final updated in updatedTasks) {
+      final idx = newAllTasks.indexWhere((t) => t.id == updated.id);
+      if (idx != -1) {
+        newAllTasks[idx] = updated;
+      }
+    }
+
+    emit(currentState.copyWith(
+      allTasks: newAllTasks,
+      filteredTasks: visibleTasks,
+    ));
+  }
+
   // ── Sorting ──────────────────────────────────────────────────────────────
 
   List<Task> _applyDefaultSort(List<Task> tasks) {
@@ -184,8 +233,8 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
         if (dueCmp != 0) return dueCmp;
       }
 
-      // By priority (high first)
-      return _priorityOrder(b.priority).compareTo(_priorityOrder(a.priority));
+      // By custom order index
+      return a.orderIndex.compareTo(b.orderIndex);
     });
     return sorted;
   }

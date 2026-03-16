@@ -6,6 +6,8 @@ import 'package:tasker/presentation/blocs/task/task_event.dart';
 
 class UndoHelpers {
   static void showUndoToggleSnackBar(BuildContext context, Task task) {
+    final taskBloc = context.read<TaskBloc>();
+    
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -15,7 +17,7 @@ class UndoHelpers {
         action: SnackBarAction(
           label: 'Undo',
           onPressed: () {
-            context.read<TaskBloc>().add(ToggleTaskEvent(task.id));
+            taskBloc.add(ToggleTaskEvent(task.id));
           },
         ),
         duration: const Duration(seconds: 4),
@@ -25,6 +27,8 @@ class UndoHelpers {
   }
 
   static void showUndoDeleteSnackBar(BuildContext context, Task task) {
+    final taskBloc = context.read<TaskBloc>();
+    
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -34,7 +38,7 @@ class UndoHelpers {
           onPressed: () {
             // Because our repository uses upsert essentially for 'put' operations in Hive,
             // dispatching CreateTaskEvent will restore the deleted task using its original ID.
-            context.read<TaskBloc>().add(CreateTaskEvent(task));
+            taskBloc.add(CreateTaskEvent(task));
           },
         ),
         duration: const Duration(seconds: 4),

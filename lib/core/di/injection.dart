@@ -41,12 +41,15 @@ import 'package:tasker/presentation/blocs/category/category_bloc.dart';
 import 'package:tasker/presentation/blocs/notification/notification_bloc.dart';
 import 'package:tasker/presentation/blocs/tag/tag_bloc.dart';
 import 'package:tasker/presentation/blocs/task/task_bloc.dart';
+import 'package:tasker/presentation/blocs/theme/theme_cubit.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 final sl = GetIt.instance;
 
 // ──── Dev Flavor ────
 
-void setupDevDependencies() {
+Future<void> setupDevDependencies() async {
+  await _registerCore();
   _registerLocalDatasources();
   _registerNotificationDatasource();
   _registerRepositories();
@@ -55,7 +58,9 @@ void setupDevDependencies() {
 
 // ──── Prod Flavor ────
 
-void setupProdDependencies() {
+Future<void> setupProdDependencies() async {
+  await _registerCore();
+
   // Local datasources under named instances (used as cache by remote datasources)
   sl.registerLazySingleton<TaskLocalDatasource>(
     () => TaskLocalDatasourceImpl(Hive.box<TaskModel>('tasks')),
@@ -96,6 +101,11 @@ void setupProdDependencies() {
 }
 
 // ──── Shared Helpers ────
+
+Future<void> _registerCore() async {
+  final prefs = await SharedPreferences.getInstance();
+  sl.registerLazySingleton<SharedPreferences>(() => prefs);
+}
 
 void _registerLocalDatasources() {
   sl.registerLazySingleton<TaskLocalDatasource>(
@@ -200,4 +210,5 @@ void _registerUseCasesAndBlocs() {
       cancelNotification: sl<CancelNotification>(),
     ),
   );
+  sl.registerFactory(() => ThemeCubit(sl<SharedPreferences>()));
 }

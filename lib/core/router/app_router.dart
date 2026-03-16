@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:tasker/presentation/pages/category/category_management_page.dart';
 import 'package:tasker/presentation/pages/home/home_page.dart';
 import 'package:tasker/presentation/pages/search/search_page.dart';
+import 'package:tasker/presentation/pages/dashboard/dashboard_page.dart';
 import 'package:tasker/presentation/pages/tag/tag_management_page.dart';
 import 'package:tasker/presentation/pages/task_detail/task_detail_page.dart';
 import 'package:tasker/presentation/pages/task_form/task_form_page.dart';
@@ -67,6 +68,11 @@ class AppRouter {
         path: '/search',
         name: 'search',
         builder: (context, state) => const SearchPage(),
+      ),
+      GoRoute(
+        path: '/dashboard',
+        name: 'dashboard',
+        builder: (context, state) => const DashboardPage(),
       ),
     ],
   );

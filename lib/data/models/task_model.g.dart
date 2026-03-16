@@ -30,13 +30,14 @@ class TaskModelAdapter extends TypeAdapter<TaskModel> {
       parentTaskId: fields[10] as String?,
       recurrence: fields[11] as RecurrenceModel?,
       completedAt: fields[12] as DateTime?,
+      orderIndex: fields[13] == null ? 0 : (fields[13] as num).toInt(),
     );
   }
 
   @override
   void write(BinaryWriter writer, TaskModel obj) {
     writer
-      ..writeByte(13)
+      ..writeByte(14)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -62,7 +63,9 @@ class TaskModelAdapter extends TypeAdapter<TaskModel> {
       ..writeByte(11)
       ..write(obj.recurrence)
       ..writeByte(12)
-      ..write(obj.completedAt);
+      ..write(obj.completedAt)
+      ..writeByte(13)
+      ..write(obj.orderIndex);
   }
 
   @override
