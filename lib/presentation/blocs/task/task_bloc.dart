@@ -53,11 +53,8 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     emit(const TaskLoading());
     try {
       final allTasks = await _getTasks();
-      // Keep all tasks (including subtasks) in allTasks for detail page lookups.
-      // Only show top-level tasks in filteredTasks for the home list.
-      final topLevelTasks = allTasks
-          .where((t) => t.parentTaskId == null)
-          .toList();
+      final topLevelTasks =
+          allTasks.where((t) => t.parentTaskId == null).toList();
       final sorted = _applyDefaultSort(topLevelTasks);
       emit(TaskLoaded(allTasks: allTasks, filteredTasks: sorted));
     } catch (e) {
@@ -106,7 +103,11 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     Emitter<TaskState> emit,
   ) async {
     try {
-      await _toggleTask(event.id);
+      await _toggleTask(
+        event.id,
+        shouldCompleteSubtasks: event.shouldCompleteSubtasks,
+        shouldCompleteParent: event.shouldCompleteParent,
+      );
       add(const LoadTasks());
     } catch (e) {
       emit(TaskError(e.toString()));
@@ -156,14 +157,10 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     LoadSubtasks event,
     Emitter<TaskState> emit,
   ) async {
-    // If we already have tasks loaded, subtasks can be found in allTasks.
-    // Only fetch from repo if state is not TaskLoaded.
     final currentState = state;
     if (currentState is TaskLoaded) {
-      // Subtasks are already in allTasks — no need to reload.
       return;
     }
-    // Otherwise, load everything.
     add(const LoadTasks());
   }
 
@@ -174,9 +171,8 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     final currentState = state;
     if (currentState is! TaskLoaded) return;
 
-    // We only reorder the currently visible (filtered) top-level tasks.
     final visibleTasks = List<Task>.from(currentState.filteredTasks);
-    
+
     final int oldIndex = event.oldIndex;
     int newIndex = event.newIndex;
     if (oldIndex < newIndex) {
@@ -186,21 +182,16 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     final Task item = visibleTasks.removeAt(oldIndex);
     visibleTasks.insert(newIndex, item);
 
-    // Update orderIndex for all visible tasks to ensure consistency
     final updatedTasks = <Task>[];
     for (int i = 0; i < visibleTasks.length; i++) {
       final updatedTask = visibleTasks[i].copyWith(orderIndex: i);
       updatedTasks.add(updatedTask);
-      
-      // We shouldn't await in a loop normally, but since we are doing local DB writes, it's fast.
-      // Or we can just call _updateTask for the ones that actually changed.
-      // For simplicity and to decouple UI from DB slightly, we save all.
+
       if (visibleTasks[i].orderIndex != i) {
         await _updateTask(updatedTask);
       }
     }
 
-    // Replace the affected tasks in allTasks
     final newAllTasks = List<Task>.from(currentState.allTasks);
     for (final updated in updatedTasks) {
       final idx = newAllTasks.indexWhere((t) => t.id == updated.id);
@@ -209,23 +200,16 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
       }
     }
 
-    emit(currentState.copyWith(
-      allTasks: newAllTasks,
-      filteredTasks: visibleTasks,
-    ));
+    emit(currentState.copyWith(allTasks: newAllTasks, filteredTasks: visibleTasks));
   }
-
-  // ── Sorting ──────────────────────────────────────────────────────────────
 
   List<Task> _applyDefaultSort(List<Task> tasks) {
     final sorted = List<Task>.from(tasks);
     sorted.sort((a, b) {
-      // Incomplete first
       if (a.isCompleted != b.isCompleted) {
         return a.isCompleted ? 1 : -1;
       }
 
-      // By due date (soonest first, nulls last)
       if (a.dueDate != b.dueDate) {
         if (a.dueDate == null) return 1;
         if (b.dueDate == null) return -1;
@@ -233,7 +217,6 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
         if (dueCmp != 0) return dueCmp;
       }
 
-      // By custom order index
       return a.orderIndex.compareTo(b.orderIndex);
     });
     return sorted;
@@ -254,9 +237,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
             cmp = a.dueDate!.compareTo(b.dueDate!);
           }
         case 'priority':
-          cmp = _priorityOrder(
-            b.priority,
-          ).compareTo(_priorityOrder(a.priority));
+          cmp = _priorityOrder(b.priority).compareTo(_priorityOrder(a.priority));
         case 'title':
           cmp = a.title.compareTo(b.title);
         case 'createdAt':
@@ -281,8 +262,6 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
         return 0;
     }
   }
-
-  // ── Filtering ─────────────────────────────────────────────────────────────
 
   List<Task> _applyFilters(
     List<Task> tasks, {

@@ -9,6 +9,7 @@ import 'package:tasker/presentation/blocs/tag/tag_bloc.dart';
 import 'package:tasker/presentation/blocs/tag/tag_state.dart';
 import 'package:tasker/presentation/blocs/task/task_bloc.dart';
 import 'package:tasker/presentation/blocs/task/task_event.dart';
+import 'package:tasker/presentation/blocs/task/task_state.dart';
 import 'package:tasker/presentation/widgets/category_chip.dart';
 import 'package:tasker/presentation/widgets/priority_badge.dart';
 import 'package:tasker/presentation/widgets/tag_chip.dart';
@@ -49,10 +50,7 @@ class TaskTile extends StatelessWidget {
         onTap: onTap,
         leading: Checkbox(
           value: task.isCompleted,
-          onChanged: (_) {
-            context.read<TaskBloc>().add(ToggleTaskEvent(task.id));
-            UndoHelpers.showUndoToggleSnackBar(context, task);
-          },
+          onChanged: (value) => _handleToggle(context, value ?? false),
         ),
         title: Text(
           task.title,
@@ -64,6 +62,102 @@ class TaskTile extends StatelessWidget {
         subtitle: _buildSubtitle(context),
         trailing: PriorityBadge(priority: task.priority),
       ),
+    );
+  }
+
+  Future<void> _handleToggle(BuildContext context, bool isChecked) async {
+    final taskBloc = context.read<TaskBloc>();
+    final taskState = taskBloc.state;
+
+    if (taskState is! TaskLoaded) return;
+
+    if (isChecked) {
+      // 1. Check for subtasks if this is a parent task
+      final subtasks =
+          taskState.allTasks.where((t) => t.parentTaskId == task.id).toList();
+      final incompleteSubtasks = subtasks.where((s) => !s.isCompleted).toList();
+
+      bool shouldCompleteSubtasks = true;
+      if (incompleteSubtasks.isNotEmpty) {
+        final result = await _showConfirmationDialog(
+          context,
+          title: 'Complete Subtasks?',
+          content:
+              'This task has ${incompleteSubtasks.length} incomplete subtasks. Do you want to complete them as well?',
+          confirmLabel: 'Complete All',
+          cancelLabel: 'Only Main Task',
+        );
+        if (result == null) return; // User cancelled the toggle entirely
+        shouldCompleteSubtasks = result;
+      }
+
+      // 2. Check if this is the last subtask being completed
+      bool shouldCompleteParent = true;
+      if (task.parentTaskId != null) {
+        final parent =
+            taskState.allTasks.where((t) => t.id == task.parentTaskId).firstOrNull;
+        if (parent != null && !parent.isCompleted) {
+          final siblings = taskState.allTasks
+              .where((t) => t.parentTaskId == task.parentTaskId && t.id != task.id)
+              .toList();
+          final allSiblingsCompleted = siblings.every((s) => s.isCompleted);
+
+          if (allSiblingsCompleted) {
+            final result = await _showConfirmationDialog(
+              context,
+              title: 'Complete Main Task?',
+              content:
+                  'All subtasks are now completed. Do you want to complete the main task "${parent.title}" too?',
+              confirmLabel: 'Complete Main Task',
+              cancelLabel: 'Keep Main Incomplete',
+            );
+            if (result == null) return;
+            shouldCompleteParent = result;
+          }
+        }
+      }
+
+      taskBloc.add(
+        ToggleTaskEvent(
+          task.id,
+          shouldCompleteSubtasks: shouldCompleteSubtasks,
+          shouldCompleteParent: shouldCompleteParent,
+        ),
+      );
+    } else {
+      // Uncompleting - usually we just do it, but we follow the same pattern
+      taskBloc.add(ToggleTaskEvent(task.id));
+    }
+
+    if (context.mounted) {
+      UndoHelpers.showUndoToggleSnackBar(context, task);
+    }
+  }
+
+  Future<bool?> _showConfirmationDialog(
+    BuildContext context, {
+    required String title,
+    required String content,
+    required String confirmLabel,
+    required String cancelLabel,
+  }) {
+    return showDialog<bool>(
+      context: context,
+      builder:
+          (context) => AlertDialog(
+            title: Text(title),
+            content: Text(content),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context, false),
+                child: Text(cancelLabel),
+              ),
+              ElevatedButton(
+                onPressed: () => Navigator.pop(context, true),
+                child: Text(confirmLabel),
+              ),
+            ],
+          ),
     );
   }
 

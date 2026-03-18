@@ -12,7 +12,12 @@ class ToggleTask {
   final NotificationRepository _notificationRepository;
   final _uuid = const Uuid();
 
-  Future<Task> call(String taskId, {DateTime? now}) async {
+  Future<Task> call(
+    String taskId, {
+    DateTime? now,
+    bool shouldCompleteSubtasks = true,
+    bool shouldCompleteParent = true,
+  }) async {
     final currentTime = now ?? DateTime.now();
 
     final task = await _taskRepository.getTaskById(taskId);
@@ -21,29 +26,88 @@ class ToggleTask {
     }
 
     if (task.isCompleted) {
-      // Uncompleting a task
-      final updatedTask = task.copyWith(
-        isCompleted: false,
-        completedAt: null,
-        updatedAt: currentTime,
+      return await _uncompleteTask(task, currentTime);
+    } else {
+      return await _completeTask(
+        task,
+        currentTime,
+        shouldCompleteSubtasks: shouldCompleteSubtasks,
+        shouldCompleteParent: shouldCompleteParent,
       );
-      await _taskRepository.updateTask(updatedTask);
+    }
+  }
 
-      if (updatedTask.dueDate != null) {
-        await _notificationRepository.scheduleNotification(updatedTask);
-      }
+  Future<Task> _uncompleteTask(Task task, DateTime currentTime) async {
+    final updatedTask = task.copyWith(
+      isCompleted: false,
+      completedAt: null,
+      updatedAt: currentTime,
+    );
+    await _taskRepository.updateTask(updatedTask);
 
-      return updatedTask;
+    if (updatedTask.dueDate != null) {
+      await _notificationRepository.scheduleNotification(updatedTask);
     }
 
-    // Completing a task
+    // If it's a subtask, we should also uncomplete the parent
+    if (updatedTask.parentTaskId != null) {
+      final parentTask =
+          await _taskRepository.getTaskById(updatedTask.parentTaskId!);
+      if (parentTask != null && parentTask.isCompleted) {
+        await _uncompleteTask(parentTask, currentTime);
+      }
+    }
+
+    return updatedTask;
+  }
+
+  Future<Task> _completeTask(
+    Task task,
+    DateTime currentTime, {
+    required bool shouldCompleteSubtasks,
+    required bool shouldCompleteParent,
+  }) async {
     final completedTask = task.copyWith(
       isCompleted: true,
       completedAt: currentTime,
       updatedAt: currentTime,
     );
     await _taskRepository.updateTask(completedTask);
-    await _notificationRepository.cancelNotification(taskId);
+    await _notificationRepository.cancelNotification(task.id);
+
+    // 1. Complete all subtasks if requested
+    if (shouldCompleteSubtasks) {
+      final subtasks = await _taskRepository.getTasksByParentId(task.id);
+      for (final subtask in subtasks) {
+        if (!subtask.isCompleted) {
+          await _completeTask(
+            subtask,
+            currentTime,
+            shouldCompleteSubtasks: true,
+            shouldCompleteParent: false, // Don't trigger parent logic recursively
+          );
+        }
+      }
+    }
+
+    // 2. If it's a subtask, check if we should complete the parent
+    if (shouldCompleteParent && task.parentTaskId != null) {
+      final siblings =
+          await _taskRepository.getTasksByParentId(task.parentTaskId!);
+      final allCompleted = siblings.every((s) => s.isCompleted);
+      if (allCompleted) {
+        final parentTask =
+            await _taskRepository.getTaskById(task.parentTaskId!);
+        if (parentTask != null && !parentTask.isCompleted) {
+          await _completeTask(
+            parentTask,
+            currentTime,
+            shouldCompleteSubtasks: false, // Don't re-complete subtasks
+            shouldCompleteParent: true, // Allow cascading up if needed
+          );
+        }
+      }
+    }
 
     // Handle recurring task: create next occurrence
     if (task.recurrence != null && task.dueDate != null) {
@@ -53,8 +117,7 @@ class ToggleTask {
       );
 
       if (nextDueDate != null) {
-        final shouldCreate =
-            task.recurrence!.endDate == null ||
+        final shouldCreate = task.recurrence!.endDate == null ||
             nextDueDate.isBefore(task.recurrence!.endDate!) ||
             nextDueDate.isAtSameMomentAs(task.recurrence!.endDate!);
 

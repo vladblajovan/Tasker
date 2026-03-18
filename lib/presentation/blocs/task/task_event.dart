@@ -41,12 +41,18 @@ class DeleteTaskEvent extends TaskEvent {
 }
 
 class ToggleTaskEvent extends TaskEvent {
-  const ToggleTaskEvent(this.id);
+  const ToggleTaskEvent(
+    this.id, {
+    this.shouldCompleteSubtasks = true,
+    this.shouldCompleteParent = true,
+  });
 
   final String id;
+  final bool shouldCompleteSubtasks;
+  final bool shouldCompleteParent;
 
   @override
-  List<Object?> get props => [id];
+  List<Object?> get props => [id, shouldCompleteSubtasks, shouldCompleteParent];
 }
 
 class FilterTasks extends TaskEvent {
